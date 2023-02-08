@@ -7,14 +7,44 @@ document.addEventListener("DOMContentLoaded", () => {
     employerInput.addEventListener("input", employerInputValidation);
     positionDescription.addEventListener("input", positionDescriptionValidation);
     document.getElementById("addExperience").addEventListener("click", addExperienceForm);
+    let next = document.getElementById("toEducationButton");
+    next.addEventListener("click", preventEducationNav);
 })
 
 function preventEducationNav(e) {
-    let nameInput = document.getElementById("nameInput");
-    let lastNameInput = document.getElementById("lastNameInput");
-    let emailInput = document.getElementById("emailInput");
-    let telInput = document.getElementById("telInput");
-    let fileInput = document.getElementById("formFile");
+    let positionInput = document.getElementById("positionInput");
+    let positionVal = JSON.parse(localStorage.getItem("positionVal"));
+    if (!positionVal) {
+        e.preventDefault();
+        positionInput.classList.add("is-invalid");
+    }
+    let employerInput = document.getElementById("employer");
+    let employerVal = JSON.parse(localStorage.getItem("employerVal"));
+    if (!employerVal) {
+        e.preventDefault();
+        employerInput.classList.add("is-invalid");
+    }
+    let startTimeInput = document.getElementById("startDate");
+    let startTimeVal = localStorage.getItem("startDateValidation");
+    if (!startTimeVal) {
+        e.preventDefault();
+        startTimeInput.style.borderColor = "#F93B1D"
+        startTimeInput.style.outlineColor = "#F93B1D"
+    }
+    let endTimeInput = document.getElementById("endDate");
+    let entTimeVal = localStorage.getItem("endDateValidation");
+    if (!entTimeVal) {
+        e.preventDefault();
+        endTimeInput.style.borderColor = "#F93B1D"
+        endTimeInput.style.outlineColor = "#F93B1D"
+    }
+    let positionDesInput = document.getElementById("positionDescription");
+    let positionDesVal = JSON.parse(localStorage.getItem("positionDescriptoinResult"));
+    if (!positionDesVal) {
+        e.preventDefault();
+        positionDesInput.style.borderColor = "#F93B1D"
+        positionDesInput.style.outlineColor = "#F93B1D"
+    }
 }
 
 
@@ -26,7 +56,7 @@ function positionDescriptionValidation(e) {
     resumePositionDescription.innerHTML = positionDescription;
 
     let result = false;
-    if (positionDescription.trim().length > 1) {
+    if (positionDescription.trim().length > 0) {
         result = true;
         document.getElementById("experienceTitle").style.display = "unset";
         e.target.style.outline = "0.5px solid #98E37E"
@@ -50,6 +80,7 @@ function positionInputValidation(e) {
     let result = inputValidation(e, position);
     localStorage.setItem("position", position);
     localStorage.setItem("positionResult", result);
+    localStorage.setItem("positionVal", result);
 }
 
 function employerInputValidation(e) {
@@ -62,6 +93,7 @@ function employerInputValidation(e) {
     let result = inputValidation(e, employer);
     localStorage.setItem("employer", employer)
     localStorage.setItem("employerResult", result);
+    localStorage.setItem("employerVal", result);
 }
 
 function inputValidation(e, value) {
@@ -193,7 +225,6 @@ function addExperienceForm() {
     const endDateLabel = document.createElement("label");
     endDateLabel.htmlFor = "date";
     endDateLabel.textContent = "დამთავრების რიცხვი";
-    endDateLabel.classList.add("form-label");
 
     startDateCol.append(startDateLabel, startDateInput)
     endDateCol.append(endDateLabel, endDateInput);

@@ -22,7 +22,6 @@ function preventExperienceNav(e) {
     let lastNameVal = JSON.parse(localStorage.getItem("lastNameValidation"));
     let emailInput = document.getElementById("emailInput");
     let emailVal = JSON.parse(localStorage.getItem("resumeEmailValidation"));
-    console.log(emailVal)
     let telInput = document.getElementById("telInput");
     let telVal = JSON.parse(localStorage.getItem("resumeTelValidation"));
     let fileInput = document.getElementById("formFile");
