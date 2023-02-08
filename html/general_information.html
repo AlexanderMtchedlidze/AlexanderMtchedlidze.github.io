@@ -17,7 +17,7 @@
   <link rel="icon" type="image/png" href="../media/LOGO-12 1.png">
 </head>
 
-<body id="bootstrap-overrides">
+<body id="bootstrap-overrides" style="width: 100%;">
   <div class="d-flex">
     <div class="d-flex justify-content-center p-5 resume-input" style="width: 5%;">
       <a href="index.html" style="height: 30px;">
@@ -33,12 +33,14 @@
       <div class="row mb-4 mt-3 g-3">
         <div class="col">
           <label for="nameInput" class="form-label">სახელი</label>
-          <input type="text" id="nameInput" class="form-control form-control-lg" placeholder="ანზორ" aria-label="First name">
+          <input type="text" id="nameInput" class="form-control form-control-lg" placeholder="ანზორ"
+            aria-label="First name">
           <div class="form-text">მინიმუმ ორი ასო, ქართული ასოები.</div>
         </div>
         <div class="col">
           <label for="lastNameInput" class="form-label">გვარი</label>
-          <input type="text" id="lastNameInput" class="form-control form-control-lg" placeholder="მუმლაძე" aria-label="Last name">
+          <input type="text" id="lastNameInput" class="form-control form-control-lg" placeholder="მუმლაძე"
+            aria-label="Last name">
           <div class="form-text">მინიმუმ ორი ასო, ქართული ასოები</div>
         </div>
       </div>
@@ -48,11 +50,13 @@
       </div>
       <div class="mb-4">
         <label for="aboutMeInput" class="form-label">ჩემ შესახებ (არასავალდებულო)</label>
-        <textarea class="form-control form-control-lg" id="aboutMeInput" rows="3" placeholder="ზოგადი ინფო შენ შესახებ"></textarea>
+        <textarea class="form-control form-control-lg" id="aboutMeInput" rows="3"
+          placeholder="ზოგადი ინფო შენ შესახებ"></textarea>
       </div>
       <div class="mb-4">
         <label for="emailInput" class="form-label">ელ. ფოსტა</label>
-        <input type="email" class="form-control form-control-lg" id="emailInput" placeholder="anzormumladze@redberry.ge" />
+        <input type="email" class="form-control form-control-lg" id="emailInput"
+          placeholder="anzormumladze@redberry.ge" />
         <div class="form-text">უნდა მთავრდებოდეს @redberry.ge-ით</div>
       </div>
       <div class="mb-5">
@@ -68,28 +72,34 @@
     <div class="p-5">
       <div class="d-flex resume">
         <div class="resumeInformation">
-          <div class="d-flex resume-name">
-            <div class="col" id="resumeFirstName"></div>
-            <div class="col" id="resumeLastName" style="margin-left: 10px"></div>
+          <div class="d-flex pb-3 border-bottom border-secondary">
+            <div>
+              <div class="d-flex resume-name">
+                <div class="col" id="resumeFirstName"></div>
+                <div class="col" id="resumeLastName" style="margin-left: 10px"></div>
+              </div>
+              <div class="d-flex resume-contanct">
+                <img src="../media/Vector-2.svg" alt="telephone" style="display: none;" id="telIcon"
+                  class="resume-icon">
+                <div class="col" id="resumeTel"></div>
+              </div>
+              <div class="d-flex resume-contact" style="margin-bottom: 20px;">
+                <img src="../media/Vector.svg" alt="envelope" style="display: none;" id="envelopeIcon"
+                  class="resume-icon">
+                <div class="col" id="resumeEmail"></div>
+              </div>
+              <div>
+                <h4 id="resumeAboutMeTitle" style="display: none;">ჩემ შესახებ</h4>
+                <div class="col" id="resumeAboutMe"></div>
+              </div>
+            </div>
+            <div>
+              <img width="200px" height="200px" alt="resumeImage" id="resumeImage" style="display: none;"
+                class="rounded-circle">
+            </div>
           </div>
-          <div class="d-flex resume-contanct">
-            <img src="../media/Vector-2.svg" alt="telephone" style="display: none;" id="telIcon" class="resume-icon">
-            <div class="col" id="resumeTel"></div>
-          </div>
-          <div class="d-flex resume-contact" style="margin-bottom: 20px;">
-            <img src="../media/Vector.svg" alt="envelope" style="display: none;" id="envelopeIcon" class="resume-icon">
-            <div class="col" id="resumeEmail"></div>
-          </div>
-          <div>
-            <h4 id="resumeAboutMeTitle" style="display:none;">ჩემ შესახებ</h4>
-            <div class="col" id="resumeAboutMe"></div>
-          </div>
-          <div class="redberryLogo"><img src="../media/LOGO-12 1.png" alt="Redberry Logo"></div>
         </div>
-        <div>
-          <img width="200px" height="200px" alt="resumeImage" id="resumeImage" style="display: none"
-            class="rounded-circle">
-        </div>
+        <div class="redberryLogo"><img src="../media/LOGO-12 1.png" alt="Redberry Logo"></div>
       </div>
     </div>
 </body>

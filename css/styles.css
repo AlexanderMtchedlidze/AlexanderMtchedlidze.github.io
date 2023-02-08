@@ -51,3 +51,7 @@ body {
     width: 100%;
     opacity: 1;
 }
+
+.light-bottom-border {
+    border-bottom: 1px solid #C8C8C8;
+}

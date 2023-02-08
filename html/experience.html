@@ -8,6 +8,7 @@
     <title>Experience</title>
     <script src="../static/retrieveData.js"></script>
     <script src="../static/goBack.js"></script>
+    <script src="../static/checkInputs.js"></script>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/general_information.css">
     <link rel="stylesheet" href="../css/experience.css">
@@ -51,8 +52,8 @@
             </div>
             <div class="mb-4 mt-4">
                 <label for="positionInput" class="form-label">თანამდებობა</label>
-                <input type="text" id="positionInput" class="form-control form-control-lg" placeholder="დეველოპერი, დიზაინერი, ა.შ."
-                    aria-label="Position">
+                <input type="text" id="positionInput" class="form-control form-control-lg"
+                    placeholder="დეველოპერი, დიზაინერი, ა.შ." aria-label="Position">
                 <div class="form-text">მინიმუმ ორი სიმბოლო</div>
             </div>
             <div class="mb-4">
@@ -63,11 +64,13 @@
             <div class="row mb-4">
                 <div class="col">
                     <label for="date">დაწყების რიცხვი</label>
-                    <input type="text" class="form-control date form-control-lg" id="startDate" placeholder="mm / dd / yyyy">
+                    <input type="text" class="form-control date form-control-lg" id="startDate"
+                        placeholder="mm / dd / yyyy">
                 </div>
                 <div class="col">
                     <label for="date">დამთავრების რიცხვი</label>
-                    <input type="text" class="form-control date form-control-lg" id="endDate" placeholder="mm / dd / yyyy">
+                    <input type="text" class="form-control date form-control-lg" id="endDate"
+                        placeholder="mm / dd / yyyy">
                 </div>
             </div>
             <div class="mb-4">
@@ -85,30 +88,49 @@
         <div class="p-5">
             <div class="d-flex resume">
                 <div class="resumeInformation">
-                    <div class="d-flex resume-name">
-                        <div class="col" id="resumeFirstName"></div>
-                        <div class="col" id="resumeLastName" style="margin-left: 10px"></div>
+                    <div class="d-flex pb-3 light-bottom-border">
+                        <div>
+                            <div class="d-flex resume-name">
+                                <div class="col" id="resumeFirstName"></div>
+                                <div class="col" id="resumeLastName" style="margin-left: 10px"></div>
+                            </div>
+                            <div class="d-flex resume-contanct">
+                                <img src="../media/Vector-2.svg" alt="telephone" style="display: none;" id="telIcon"
+                                    class="resume-icon">
+                                <div class="col" id="resumeTel"></div>
+                            </div>
+                            <div class="d-flex resume-contact" style="margin-bottom: 20px;">
+                                <img src="../media/Vector.svg" alt="envelope" style="display: none;" id="envelopeIcon"
+                                    class="resume-icon">
+                                <div class="col" id="resumeEmail"></div>
+                            </div>
+                            <div>
+                                <h4 id="resumeAboutMeTitle" style="display: none;">ჩემ შესახებ</h4>
+                                <div class="col" id="resumeAboutMe"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <img width="200px" height="200px" alt="resumeImage" id="resumeImage" style="display: none"
+                                class="rounded-circle">
+                        </div>
                     </div>
-                    <div class="d-flex resume-contanct">
-                        <img src="../media/Vector-2.svg" alt="telephone" style="display: none;" id="telIcon"
-                            class="resume-icon">
-                        <div class="col" id="resumeTel"></div>
+                    <div class="pb-2" id="experience">
+                        <div class="mt-3">
+                            <h5 id="experienceTitle" style="display: none;">გამოცდილება</h4>
+                        </div>
+                        <div class="d-flex" style="font-weight: bold;">
+                            <div id="position" style="display: none;"></div>
+                            <div id="employer" style="display: none;"></div>
+                        </div>
+                        <div class="d-flex text-secondary">
+                            <div id="startTime" class="me-2" style="display: none;"></div>
+                            <div id="endTime" style="display: none;"></div>
+                        </div>
+                        <div id="resumePositionDescription" class="mt-2" style="display: none;"></div>
                     </div>
-                    <div class="d-flex resume-contact" style="margin-bottom: 20px;">
-                        <img src="../media/Vector.svg" alt="envelope" style="display: none;" id="envelopeIcon"
-                            class="resume-icon">
-                        <div class="col" id="resumeEmail"></div>
-                    </div>
-                    <div>
-                        <h4 id="resumeAboutMeTitle" style="display:none;">ჩემ შესახებ</h4>
-                        <div class="col" id="resumeAboutMe"></div>
-                    </div>
+
                 </div>
                 <div class="redberryLogo"><img src="../media/LOGO-12 1.png" alt="Redberry Logo"></div>
-                <div>
-                    <img width="200px" height="200px" alt="resumeImage" id="resumeImage" style="display: none"
-                        class="rounded-circle">
-                </div>
             </div>
         </div>
 </body>
