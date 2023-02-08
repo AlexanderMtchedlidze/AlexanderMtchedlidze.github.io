@@ -140,8 +140,7 @@ function addExperienceForm() {
     // Create the position input
     const positionInput = document.createElement("input");
     positionInput.type = "text";
-    positionInput.id = "positionInput";
-    positionInput.classList.add("form-control", "form-control-lg");
+    positionInput.classList.add("form-control", "form-control-lg", "positionInput");
     positionInput.placeholder = "დეველოპერი, დიზაინერი, ა.შ.";
     positionInput.setAttribute("aria-label", "Position");
 
@@ -166,8 +165,7 @@ function addExperienceForm() {
     // Create the employer input
     const employerInput = document.createElement("input");
     employerInput.type = "text";
-    employerInput.id = "employerInput";
-    employerInput.classList.add("form-control", "form-control-lg");
+    employerInput.classList.add("form-control", "form-control-lg", "employerInput");
     employerInput.placeholder = "დამსაქმებელი";
     employerInput.setAttribute("aria-label", "Employer");
 
@@ -192,7 +190,6 @@ function addExperienceForm() {
     // Create the start date input
     const startDateInput = document.createElement("input");
     startDateInput.type = "text";
-    startDateInput.id = "startDateInput";
     startDateInput.classList.add("form-control", "form-control-lg", "startDate");
     startDateInput.placeholder = "mm / dd / yyyy";
     startDateInput.setAttribute("aria-label", "Start Date");
@@ -219,7 +216,7 @@ function addExperienceForm() {
 
     const endDateInput = document.createElement("input");
     endDateInput.type = "text";
-    endDateInput.classList.add("form-control", "form-control-lg", "date");
+    endDateInput.classList.add("form-control", "form-control-lg", "date", "endDate");
     endDateInput.placeholder = "mm / dd / yyyy";
 
     const endDateLabel = document.createElement("label");
@@ -239,8 +236,7 @@ function addExperienceForm() {
     descriptionLabel.textContent = "აღწერა";
 
     const descriptionInput = document.createElement("textarea");
-    descriptionInput.id = "positionDescription";
-    descriptionInput.classList.add("form-control", "form-control-lg");
+    descriptionInput.classList.add("form-control", "form-control-lg", "positionDescription");
     descriptionInput.rows = 3;
     descriptionInput.placeholder = "როლი თანამდებობაზე და ზოგადი აღწერა";
 
@@ -249,5 +245,17 @@ function addExperienceForm() {
     descriptionDiv.appendChild(descriptionLabel);
     descriptionDiv.appendChild(descriptionInput)
 
-    experienceDescription.append(positionDiv, employerDiv, dateDiv, descriptionDiv);
+    const createdExperienceDiv = document.createElement("div");
+    createdExperienceDiv.classList.add(`createdExperienceDiv-${generateRandomString()}`);
+    createdExperienceDiv.append(positionDiv, employerDiv, dateDiv, descriptionDiv);
+
+    experienceDescription.append(createdExperienceDiv);
+
+    const key = `experienceDiv-${generateRandomString()}`;
+    localStorage.setItem(key, createdExperienceDiv.outerHTML);
 }
+
+// Function to generate a random string
+const generateRandomString = () => {
+    return Math.random().toString(36).substring(2, 15);
+};

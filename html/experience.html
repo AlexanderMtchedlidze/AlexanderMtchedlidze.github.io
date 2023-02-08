@@ -52,32 +52,32 @@
             <div id="experienceDescription">
                 <div class="mb-4 mt-4">
                     <label for="positionInput" class="form-label">თანამდებობა</label>
-                    <input type="text" id="positionInput" class="form-control form-control-lg"
+                    <input type="text" id="positionInput" class="form-control form-control-lg positionInput"
                         placeholder="დეველოპერი, დიზაინერი, ა.შ." aria-label="Position">
                     <div class="form-text">მინიმუმ ორი სიმბოლო</div>
                 </div>
                 <div class="mb-4">
                     <label for="employerInput" class="form-label">დამსაქმებელი</label>
-                    <input type="text" class="form-control form-control-lg" id="employerInput"
+                    <input type="text" class="form-control form-control-lg employerInput" id="employerInput"
                         placeholder="დამსაქმებელი" />
                     <div class="form-text">მინიმუმ ორი სიმბოლო</div>
                 </div>
                 <div class="row mb-4">
                     <div class="col">
                         <label for="date">დაწყების რიცხვი</label>
-                        <input type="text" class="form-control date form-control-lg" id="startDate"
+                        <input type="text" class="form-control date form-control-lg startDateInput" id="startDate"
                             placeholder="mm / dd / yyyy">
                     </div>
                     <div class="col">
                         <label for="date">დამთავრების რიცხვი</label>
-                        <input type="text" class="form-control date form-control-lg" id="endDate"
+                        <input type="text" class="form-control date form-control-lg endDateInput" id="endDate"
                             placeholder="mm / dd / yyyy">
                     </div>
                 </div>
                 <div class="mb-4">
                     <label for="positionDescription" class="form-label">აღწერა</label>
-                    <textarea class="form-control form-control-lg" id="positionDescription" rows="3"
-                        placeholder="როლი თანამდებობაზე და ზოგადი აღწერა"></textarea>
+                    <textarea class="form-control form-control-lg positionDescriptionInput" id="positionDescription"
+                        rows="3" placeholder="როლი თანამდებობაზე და ზოგადი აღწერა"></textarea>
                 </div>
             </div>
 
@@ -139,6 +139,7 @@
                             <div id="endTime"></div>
                         </div>
                         <div id="resumePositionDescription" class="mt-2"></div>
+                        <div id="createdExperience"></div>
                     </div>
 
                 </div>

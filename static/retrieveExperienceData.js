@@ -11,16 +11,37 @@ document.addEventListener("DOMContentLoaded", () => {
         retrieveStartDate();
         retrieveEndDate();
         retrievePositionDescription();
-        let inputs = document.querySelectorAll("input");
-        for (let i = 0; i < inputs.length; i++) {
-            if (!inputs[i].value.trim().length > 0) {
-                document.querySelector("#experience").classList.remove("light-bottom-border");
-                break;
-            }
-        }
-        document.querySelector("#experience").classList.add("light-bottom-border")
+        retrieveCreatedExperience();
+        checkInputValidity();
+        const keys = Object.keys(localStorage).filter(key => key.startsWith('experienceDiv-'));
+
+        // Iterate over the keys and retrieve the div elements from local storage
+        keys.forEach(key => {
+            const divString = localStorage.getItem(key);
+            const experienceDescription = document.getElementById("experienceDescription");
+            experienceDescription.innerHTML += divString;
+        });
     }
 })
+
+function retrieveCreatedExperience() {
+    let createdExperienceDiv = localStorage.getItem("createdExperienceDiv");
+    if (createdExperienceDiv) {
+        const divContainer = document.getElementById("createdExperience");
+        divContainer.innerHTML += createdExperienceDiv;
+    }
+}
+
+function checkInputValidity() {
+    let inputs = document.querySelectorAll("input");
+    for (let i = 0; i < inputs.length; i++) {
+        if (!inputs[i].value.trim().length > 0) {
+            document.querySelector("#experience").classList.remove("light-bottom-border");
+            break;
+        }
+    }
+    document.querySelector("#experience").classList.add("light-bottom-border")
+}
 
 
 function retrieveFirstName() {
