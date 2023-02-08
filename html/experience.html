@@ -6,9 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Experience</title>
-    <script src="../static/retrieveData.js"></script>
     <script src="../static/goBack.js"></script>
-    <script src="../static/checkInputs.js"></script>
+    <script src="../static/retrieveExperienceData.js"></script>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/general_information.css">
     <link rel="stylesheet" href="../css/experience.css">
@@ -50,34 +49,43 @@
                 <div>გამოცდილება</div>
                 <div>2/3</div>
             </div>
-            <div class="mb-4 mt-4">
-                <label for="positionInput" class="form-label">თანამდებობა</label>
-                <input type="text" id="positionInput" class="form-control form-control-lg"
-                    placeholder="დეველოპერი, დიზაინერი, ა.შ." aria-label="Position">
-                <div class="form-text">მინიმუმ ორი სიმბოლო</div>
-            </div>
-            <div class="mb-4">
-                <label for="employerInput" class="form-label">დამსაქმებელი</label>
-                <input type="text" class="form-control form-control-lg" id="employerInput" placeholder="დამსაქმებელი" />
-                <div class="form-text">მინიმუმ ორი სიმბოლო</div>
-            </div>
-            <div class="row mb-4">
-                <div class="col">
-                    <label for="date">დაწყების რიცხვი</label>
-                    <input type="text" class="form-control date form-control-lg" id="startDate"
-                        placeholder="mm / dd / yyyy">
+            <div id="experienceDescription">
+                <div class="mb-4 mt-4">
+                    <label for="positionInput" class="form-label">თანამდებობა</label>
+                    <input type="text" id="positionInput" class="form-control form-control-lg"
+                        placeholder="დეველოპერი, დიზაინერი, ა.შ." aria-label="Position">
+                    <div class="form-text">მინიმუმ ორი სიმბოლო</div>
                 </div>
-                <div class="col">
-                    <label for="date">დამთავრების რიცხვი</label>
-                    <input type="text" class="form-control date form-control-lg" id="endDate"
-                        placeholder="mm / dd / yyyy">
+                <div class="mb-4">
+                    <label for="employerInput" class="form-label">დამსაქმებელი</label>
+                    <input type="text" class="form-control form-control-lg" id="employerInput"
+                        placeholder="დამსაქმებელი" />
+                    <div class="form-text">მინიმუმ ორი სიმბოლო</div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col">
+                        <label for="date">დაწყების რიცხვი</label>
+                        <input type="text" class="form-control date form-control-lg" id="startDate"
+                            placeholder="mm / dd / yyyy">
+                    </div>
+                    <div class="col">
+                        <label for="date">დამთავრების რიცხვი</label>
+                        <input type="text" class="form-control date form-control-lg" id="endDate"
+                            placeholder="mm / dd / yyyy">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="positionDescription" class="form-label">აღწერა</label>
+                    <textarea class="form-control form-control-lg" id="positionDescription" rows="3"
+                        placeholder="როლი თანამდებობაზე და ზოგადი აღწერა"></textarea>
                 </div>
             </div>
-            <div class="mb-4">
-                <label for="positionDescription" class="form-label">აღწერა</label>
-                <textarea class="form-control form-control-lg" id="positionDescription" rows="3"
-                    placeholder="როლი თანამდებობაზე და ზოგადი აღწერა"></textarea>
+
+            <div class="mt-2 light-top-border">
+                <button class="btn btn-primary next-button mt-3" style="width: 200px;" id="addExperience">გამოცდილების
+                    დამატება</button>
             </div>
+
             <div class="d-flex justify-content-between mt-auto mb-5" id="submit">
                 <a href="general_information.html" class="btn btn-primary next-button" id="toExperienceButton"
                     role="button" aria-pressed="true">უკან</a>
@@ -116,17 +124,17 @@
                     </div>
                     <div class="pb-2" id="experience">
                         <div class="mt-3">
-                            <h5 id="experienceTitle" style="display: none;">გამოცდილება</h4>
+                            <h5 id="experienceTitle">გამოცდილება</h4>
                         </div>
                         <div class="d-flex" style="font-weight: bold;">
-                            <div id="position" style="display: none;"></div>
-                            <div id="employer" style="display: none;"></div>
+                            <div id="position"></div>
+                            <div id="employer"></div>
                         </div>
                         <div class="d-flex text-secondary">
-                            <div id="startTime" class="me-2" style="display: none;"></div>
-                            <div id="endTime" style="display: none;"></div>
+                            <div id="startTime" class="me-2"></div>
+                            <div id="endTime"></div>
                         </div>
-                        <div id="resumePositionDescription" class="mt-2" style="display: none;"></div>
+                        <div id="resumePositionDescription" class="mt-2"></div>
                     </div>
 
                 </div>

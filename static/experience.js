@@ -6,7 +6,17 @@ document.addEventListener("DOMContentLoaded", () => {
     positionInput.addEventListener("input", positionInputValidation);
     employerInput.addEventListener("input", employerInputValidation);
     positionDescription.addEventListener("input", positionDescriptionValidation);
+    document.getElementById("addExperience").addEventListener("click", addExperienceForm);
 })
+
+function preventEducationNav(e) {
+    let nameInput = document.getElementById("nameInput");
+    let lastNameInput = document.getElementById("lastNameInput");
+    let emailInput = document.getElementById("emailInput");
+    let telInput = document.getElementById("telInput");
+    let fileInput = document.getElementById("formFile");
+}
+
 
 function positionDescriptionValidation(e) {
     checkInputs()
@@ -14,7 +24,7 @@ function positionDescriptionValidation(e) {
     let resumePositionDescription = document.getElementById("resumePositionDescription");
     resumePositionDescription.style.display = "unset";
     resumePositionDescription.innerHTML = positionDescription;
-    
+
     let result = false;
     if (positionDescription.trim().length > 1) {
         result = true;
@@ -90,4 +100,123 @@ function checkInputs() {
     if (isValid) {
         document.getElementById("experience").classList.add("light-bottom-border");
     }
+}
+
+function addExperienceForm() {
+    const experienceDescription = document.getElementById("experienceDescription");
+
+    // Create the position input
+    const positionInput = document.createElement("input");
+    positionInput.type = "text";
+    positionInput.id = "positionInput";
+    positionInput.classList.add("form-control", "form-control-lg");
+    positionInput.placeholder = "დეველოპერი, დიზაინერი, ა.შ.";
+    positionInput.setAttribute("aria-label", "Position");
+
+    // Create the label for the position input
+    const positionLabel = document.createElement("label");
+    positionLabel.htmlFor = "positionInput";
+    positionLabel.classList.add("form-label");
+    positionLabel.textContent = "თანამდებობა";
+
+    // create help text
+    const positionHelpText = document.createElement("div");
+    positionHelpText.classList.add("form-text");
+    positionHelpText.textContent = "მინიმუმ ორი სიმბოლო"
+
+    // Create the div for the position input
+    const positionDiv = document.createElement("div");
+    positionDiv.classList.add("mb-4", "mt-4");
+    positionDiv.appendChild(positionLabel);
+    positionDiv.appendChild(positionInput);
+    positionDiv.appendChild(positionHelpText);
+
+    // Create the employer input
+    const employerInput = document.createElement("input");
+    employerInput.type = "text";
+    employerInput.id = "employerInput";
+    employerInput.classList.add("form-control", "form-control-lg");
+    employerInput.placeholder = "დამსაქმებელი";
+    employerInput.setAttribute("aria-label", "Employer");
+
+    // Create the label for the employer input
+    const employerLabel = document.createElement("label");
+    employerLabel.htmlFor = "employerInput";
+    employerLabel.classList.add("form-label");
+    employerLabel.textContent = "დამსაქმებელი";
+
+    // create help text
+    const employerHelpText = document.createElement("div");
+    employerHelpText.classList.add("form-text");
+    employerHelpText.textContent = "მინიმუმ ორი სიმბოლო"
+
+    // Create the div for the employer input
+    const employerDiv = document.createElement("div");
+    employerDiv.classList.add("mb-4");
+    employerDiv.appendChild(employerLabel);
+    employerDiv.appendChild(employerInput);
+    employerDiv.appendChild(employerHelpText)
+
+    // Create the start date input
+    const startDateInput = document.createElement("input");
+    startDateInput.type = "text";
+    startDateInput.id = "startDateInput";
+    startDateInput.classList.add("form-control", "form-control-lg", "startDate");
+    startDateInput.placeholder = "mm / dd / yyyy";
+    startDateInput.setAttribute("aria-label", "Start Date");
+
+    // create col for the start date
+    const startDateCol = document.createElement("div");
+    startDateCol.classList.add("col")
+
+    // Create the label for the start date input
+    const startDateLabel = document.createElement("label");
+    startDateLabel.htmlFor = "date";
+    startDateLabel.classList.add("form-label");
+    startDateLabel.textContent = "დაწყების რიცხვი";
+
+    // Create the div for the start date input
+    const startDateDiv = document.createElement("div");
+    startDateDiv.classList.add("mb-4");
+    startDateDiv.appendChild(startDateLabel);
+    startDateDiv.appendChild(startDateInput);
+
+    // create col for the end date
+    const endDateCol = document.createElement("div");
+    endDateCol.classList.add("col")
+
+    const endDateInput = document.createElement("input");
+    endDateInput.type = "text";
+    endDateInput.classList.add("form-control", "form-control-lg", "date");
+    endDateInput.placeholder = "mm / dd / yyyy";
+
+    const endDateLabel = document.createElement("label");
+    endDateLabel.htmlFor = "date";
+    endDateLabel.textContent = "დამთავრების რიცხვი";
+    endDateLabel.classList.add("form-label");
+
+    startDateCol.append(startDateLabel, startDateInput)
+    endDateCol.append(endDateLabel, endDateInput);
+
+    const dateDiv = document.createElement("div");
+    dateDiv.classList.add("row", "mb-4");
+    dateDiv.append(startDateCol, endDateCol);
+
+    const descriptionLabel = document.createElement("label");
+    descriptionLabel.htmlFor = "positionDescription";
+    descriptionLabel.classList.add("form-label");
+    descriptionLabel.textContent = "აღწერა";
+
+    const descriptionInput = document.createElement("textarea");
+    descriptionInput.id = "positionDescription";
+    descriptionInput.classList.add("form-control", "form-control-lg");
+    descriptionInput.rows = 3;
+    descriptionInput.placeholder = "როლი თანამდებობაზე და ზოგადი აღწერა";
+
+    const descriptionDiv = document.createElement("div");
+    descriptionDiv.classList.add("mb-4");
+    descriptionDiv.appendChild(descriptionLabel);
+    descriptionDiv.appendChild(descriptionInput)
+
+    experienceDescription.append(positionDiv, employerDiv, dateDiv, descriptionDiv);
 }
