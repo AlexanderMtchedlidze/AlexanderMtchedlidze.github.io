@@ -271,13 +271,21 @@ function addExperienceForm() {
     descriptionDiv.appendChild(descriptionInput)
 
     const createdExperienceDiv = document.createElement("div");
-    createdExperienceDiv.classList.add(`createdExperienceDiv-${generateRandomString()}`);
+    const key = generateRandomString()
+    createdExperienceDiv.classList.add(`createdExperienceDiv-${key}`);
     createdExperienceDiv.append(positionDiv, employerDiv, dateDiv, descriptionDiv);
 
     experienceDescription.append(createdExperienceDiv);
+    
+    positionInput.addEventListener("input", (e) => {
+        document.querySelector(`.positionPlaceholder_${key}`).innerHTML = e.target.value;
+    })
 
-    const key = `experienceDiv-${generateRandomString()}`;
-    localStorage.setItem(key, createdExperienceDiv.outerHTML);
+    employerInput.addEventListener(input)
+
+    const divKey = `experienceDiv-${generateRandomString()}`;
+    localStorage.setItem(divKey, createdExperienceDiv.outerHTML);
+    createExperience(key)
 }
 
 // Function to generate a random string
@@ -287,11 +295,17 @@ const generateRandomString = () => {
 
 function retrieveCreatedExperience() {
     const keys = Object.keys(localStorage).filter(key => key.startsWith('experienceDiv-'));
-
+    const keys2 = Object.keys(localStorage).filter(key => key.startsWith("createdExperience-"))
     // Iterate over the keys and retrieve the div elements from local storage
     keys.forEach(key => {
         const divString = localStorage.getItem(key);
         const experienceDescription = document.getElementById("newExperienceDescription");
+        experienceDescription.innerHTML += divString;
+    });
+
+    keys2.forEach(key => {
+        const divString = localStorage.getItem(key);
+        const experienceDescription = document.getElementById("experience");
         experienceDescription.innerHTML += divString;
     });
 }
@@ -427,4 +441,57 @@ function retrievePositionDescription() {
         positionInput.value = positionDes;
     }
     resumePositionDes.innerHTML = positionDes;
+}
+
+
+function createExperience(key) {
+    let experience = document.createElement('div');
+    experience.className = "pb-2";
+
+    let experienceTitle = document.createElement('div');
+    experienceTitle.className = "mt-3";
+
+    let h5 = document.createElement('h5');
+    h5.innerHTML = "გამოცდილება";
+
+    experienceTitle.appendChild(h5);
+    experience.appendChild(experienceTitle);
+
+    let dFlex = document.createElement('div');
+    dFlex.className = "d-flex";
+    dFlex.style.fontWeight = "bold";
+
+    let position = document.createElement('div');
+    position.classList.add(`positionPlaceholder_${key}`)
+
+    let employer = document.createElement('div');
+    employer.classList.add(`employerPlaceholder_${key}`)
+
+    dFlex.appendChild(position);
+    dFlex.appendChild(employer);
+    experience.appendChild(dFlex);
+
+    let dFlexSecondary = document.createElement('div');
+    dFlexSecondary.className = "d-flex text-secondary";
+
+    let startTime = document.createElement('div');
+    startTime.classList.add(`startTime_${key}`, "me-2");
+
+    let endTime = document.createElement('div');
+    startTime.classList.add(`endTime_${key}`);
+
+    dFlexSecondary.appendChild(startTime);
+    dFlexSecondary.appendChild(endTime);
+    experience.appendChild(dFlexSecondary);
+
+    let resumePositionDescription = document.createElement('div');
+    resumePositionDescription.id = "resumePositionDescription";
+    resumePositionDescription.classList.add(`$positionDescription_${key}`, "mt-2");
+
+    experience.appendChild(resumePositionDescription);
+
+    let experienceDiv = document.querySelector(".resumeInformation")
+
+    experienceDiv.appendChild(experience);
+    localStorage.setItem(`createdExperience-${key}`, experience.outerHTML);
 }
