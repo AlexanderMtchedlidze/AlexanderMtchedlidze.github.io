@@ -1,3 +1,5 @@
+let counter = 0;
+
 document.addEventListener("DOMContentLoaded", () => {
     let positionInput = document.getElementById("positionInput");
     let employerInput = document.getElementById("employerInput");
@@ -79,7 +81,6 @@ function positionInputValidation(e) {
 
     let result = inputValidation(e, position);
     localStorage.setItem("position", position);
-    localStorage.setItem("positionResult", result);
     localStorage.setItem("positionVal", result);
 }
 
@@ -92,7 +93,6 @@ function employerInputValidation(e) {
 
     let result = inputValidation(e, employer);
     localStorage.setItem("employer", employer)
-    localStorage.setItem("employerResult", result);
     localStorage.setItem("employerVal", result);
 }
 

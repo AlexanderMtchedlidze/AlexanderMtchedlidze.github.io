@@ -13,23 +13,18 @@ document.addEventListener("DOMContentLoaded", () => {
         retrievePositionDescription();
         retrieveCreatedExperience();
         checkInputValidity();
-        const keys = Object.keys(localStorage).filter(key => key.startsWith('experienceDiv-'));
-
-        // Iterate over the keys and retrieve the div elements from local storage
-        keys.forEach(key => {
-            const divString = localStorage.getItem(key);
-            const experienceDescription = document.getElementById("experienceDescription");
-            experienceDescription.innerHTML += divString;
-        });
     }
 })
 
 function retrieveCreatedExperience() {
-    let createdExperienceDiv = localStorage.getItem("createdExperienceDiv");
-    if (createdExperienceDiv) {
-        const divContainer = document.getElementById("createdExperience");
-        divContainer.innerHTML += createdExperienceDiv;
-    }
+    const keys = Object.keys(localStorage).filter(key => key.startsWith('experienceDiv-'));
+
+    // Iterate over the keys and retrieve the div elements from local storage
+    keys.forEach(key => {
+        const divString = localStorage.getItem(key);
+        const experienceDescription = document.getElementById("newExperienceDescription");
+        experienceDescription.innerHTML += divString;
+    });
 }
 
 function checkInputValidity() {
