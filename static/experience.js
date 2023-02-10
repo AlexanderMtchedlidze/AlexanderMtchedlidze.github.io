@@ -10,7 +10,9 @@ $(document).ready(function () {
     positionDescription.on("input", positionDescriptionValidation);
     addExperience.on("click", addExperienceForm);
     next.on("click", preventEducationNav);
-    document.querySelectorAll(".startDate").forEach(element => startDateInteraction(element));
+    document.querySelectorAll(".startDate").forEach(element => {
+        console.log(element)
+        startDateInteraction(element)});
     document.querySelectorAll(".endDate").forEach(element => endDateInteraction(element));
 
     retrieveFirstName();
@@ -47,7 +49,7 @@ function retrieveStartDateInputs() {
         }).on('changeDate', function (selectedDate) {
             var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
             document.querySelector(`.startTime_${result}`).innerHTML = formattedDate;
-            localStorage.setItem(`newExperienceStartTime_${result}`, formattedDate);
+            localStorage.setItem(`newExperienceStartDate_${result}`, formattedDate);
             $(this).css("outline", "0.5px solid #98E37E");
             $(this).css("border", "0.5px solid #98E37E");
         })
@@ -64,9 +66,10 @@ function retrieveEndDateInputs() {
             format: "dd/mm/yyyy",
             autoclose: true,
         }).on('changeDate', function (selectedDate) {
+            console.log(selectedDate)
             var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
             document.querySelector(`.endTime_${result}`).innerHTML = formattedDate;
-            localStorage.setItem(`newExperienceEndTime_${result}`, formattedDate);
+            localStorage.setItem(`newExperienceEndDate_${result}`, formattedDate);
             $(this).css("outline", "0.5px solid #98E37E");
             $(this).css("border", "0.5px solid #98E37E");
         })
@@ -147,11 +150,11 @@ function startDateInteraction(element) {
         autoclose: true,
     }).on('changeDate', function (selectedDate) {
         var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
-        document.getElementById("endTime").innerHTML = formattedDate;
-        localStorage.setItem("endDate", formattedDate);
+        document.getElementById("startTime").innerHTML = formattedDate;
+        localStorage.setItem("startDate", formattedDate);
         document.getElementById("experienceTitle").style.display = "unset";
-        document.getElementById("endTime").style.display = "unset"
-        localStorage.setItem("endDateValidation", true);
+        document.getElementById("startTime").style.display = "unset"
+        localStorage.setItem("startDateValidation", true);
         $(this).css("outline", "0.5px solid #98E37E");
         $(this).css("border", "0.5px solid #98E37E");
     });
