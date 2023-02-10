@@ -10,9 +10,7 @@ $(document).ready(function () {
     positionDescription.on("input", positionDescriptionValidation);
     addExperience.on("click", addExperienceForm);
     next.on("click", preventEducationNav);
-    document.querySelectorAll(".startDate").forEach(element => {
-        console.log(element)
-        startDateInteraction(element)});
+    document.querySelectorAll(".startDate").forEach(element => { startDateInteraction(element) });
     document.querySelectorAll(".endDate").forEach(element => endDateInteraction(element));
 
     retrieveFirstName();
@@ -31,14 +29,13 @@ $(document).ready(function () {
     retrievePositionInputs();
     retrieveEmployerInputs();
     retrieveStartDateInputs();
-    retrieveEndDateInputs();    
+    retrieveEndDateInputs();
     retrievePositionDescriptionInputs();
     getKeys();
 });
 
 function retrieveStartDateInputs() {
     document.querySelectorAll('input[class*="startDateInput_"]').forEach(element => {
-        console.log(element)
         let targetClass = Array.from(element.classList).find(function (className) {
             return className.startsWith("startDateInput_");
         });
@@ -50,6 +47,7 @@ function retrieveStartDateInputs() {
             var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
             document.querySelector(`.startTime_${result}`).innerHTML = formattedDate;
             localStorage.setItem(`newExperienceStartDate_${result}`, formattedDate);
+            localStorage.setItem(`newExperienceStartDateValidity_${result}`, true);
             $(this).css("outline", "0.5px solid #98E37E");
             $(this).css("border", "0.5px solid #98E37E");
         })
@@ -66,10 +64,10 @@ function retrieveEndDateInputs() {
             format: "dd/mm/yyyy",
             autoclose: true,
         }).on('changeDate', function (selectedDate) {
-            console.log(selectedDate)
             var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
             document.querySelector(`.endTime_${result}`).innerHTML = formattedDate;
             localStorage.setItem(`newExperienceEndDate_${result}`, formattedDate);
+            localStorage.setItem(`newExperienceEndDateValidity_${result}`, true);
             $(this).css("outline", "0.5px solid #98E37E");
             $(this).css("border", "0.5px solid #98E37E");
         })
@@ -86,6 +84,8 @@ function retrievePositionInputs() {
         element.addEventListener("input", e => {
             document.querySelector(`.positionPlaceholder_${result}`).innerHTML = e.target.value;
             localStorage.setItem(`newExperiencePosition_${result}`, e.target.value);
+            let inputResult = inputValidation(e, e.target.value);
+            localStorage.setItem(`newExperiencePositionValidity_${result}`, inputResult);
         })
     })
 }
@@ -99,6 +99,8 @@ function retrieveEmployerInputs() {
         element.addEventListener("input", (e) => {
             document.querySelector(`.employerPlaceholder_${result}`).innerHTML = ", " + e.target.value;
             localStorage.setItem(`newExperienceEmployer_${result}`, e.target.value);
+            let inputResult = inputValidation(e, e.target.value);
+            localStorage.setItem(`newExperienceEmployerValidity_${result}`, inputResult);
         })
     })
 }
@@ -112,6 +114,13 @@ function retrievePositionDescriptionInputs() {
         element.addEventListener("input", (e) => {
             document.querySelector(`.positionDescriptionPlaceholder_${result}`).innerHTML = e.target.value;
             localStorage.setItem(`newExperienceDescription_${result}`, e.target.value);
+            if (e.target.value.trim().length > 0) {
+                removeValidationError(e);
+                localStorage.setItem(`newExperienceDescriptionValidity_${result}`, true);
+            } else {
+                addValidationError(e);
+                localStorage.setItem(`newExperienceDescriptionValidity_${result}`, false);
+            }
         })
     })
 }
@@ -120,23 +129,21 @@ function getKeys() {
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key.startsWith("newExperience")) {
-            console.log(key)
             const value = localStorage.getItem(key);
-            console.log(value)
             const experienceKey = key.split("_")[1];
-            if (key.includes("Position")) {
+            if (key.includes("Position") && !key.includes("Validity")) {
                 document.querySelector(`.positionInput_${experienceKey}`).value = value;
                 document.querySelector(`.positionPlaceholder_${experienceKey}`).innerHTML = value;
-            } if (key.includes("Employer")) {
+            } if (key.includes("Employer") && !key.includes("Validity")) {
                 document.querySelector(`.employerInput_${experienceKey}`).value = value;
                 document.querySelector(`.employerPlaceholder_${experienceKey}`).innerHTML = ", " + value;
-            } if (key.includes("Description")) {
+            } if (key.includes("Description") && !key.includes("Validity")) {
                 document.querySelector(`.positionDescriptionInput_${experienceKey}`).value = value;
                 document.querySelector(`.positionDescriptionPlaceholder_${experienceKey}`).innerHTML = value;
-            } if (key.includes("StartDate")) {
+            } if (key.includes("StartDate") && !key.includes("Validity")) {
                 document.querySelector(`.startDateInput_${experienceKey}`).value = value;
                 document.querySelector(`.startTime_${experienceKey}`).innerHTML = value;
-            } if (key.includes("EndDate")) {
+            } if (key.includes("EndDate") && !key.includes("Validity")) {
                 document.querySelector(`.endDateInput_${experienceKey}`).value = value;
                 document.querySelector(`.endTime_${experienceKey}`).innerHTML = value;
             }
@@ -183,7 +190,7 @@ function preventEducationNav(e) {
         e.preventDefault();
         positionInput.classList.add("is-invalid");
     }
-    let employerInput = document.getElementById("employer");
+    let employerInput = document.getElementById("employerInput");
     let employerVal = JSON.parse(localStorage.getItem("employerVal"));
     if (!employerVal) {
         e.preventDefault();
@@ -210,6 +217,51 @@ function preventEducationNav(e) {
         positionDesInput.style.borderColor = "#F93B1D"
         positionDesInput.style.outlineColor = "#F93B1D"
     }
+    let inputsResult = checkAllInputsValidity();
+    if (!inputsResult) {
+        e.preventDefault();
+    }
+}
+
+function checkAllInputsValidity() {
+    let result = true;
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith("newExperience")) {
+            const value = localStorage.getItem(key);
+            const experienceKey = key.split("_")[1];
+            if (key.includes("PositionValidity")) {
+                if (!JSON.parse(value)) {
+                    document.querySelector(`.positionInput_${experienceKey}`).classList.add("is-invalid");
+                    result = false;
+                }
+            } if (key.includes("EmployerValidity")) {
+                if (!JSON.parse(value)) {
+                    document.querySelector(`.employerInput_${experienceKey}`).classList.add("is-invalid");
+                    result = false;
+                }
+            } if (key.includes("DescriptionValidity")) {
+                if (!JSON.parse(value)) {
+                    document.querySelector(`.positionDescriptionInput_${experienceKey}`).style.borderColor = "#F93B1D";
+                    document.querySelector(`.positionDescriptionInput_${experienceKey}`).style.outlineColor = "#F93B1D";
+                    result = false;
+                }
+            } if (key.includes("StartDateValidity")) {
+                if (!JSON.parse(value)) {
+                    document.querySelector(`.startDateInput_${experienceKey}`).style.borderColor = "#F93B1D";
+                    document.querySelector(`.startDateInput_${experienceKey}`).style.outlineColor = "#F93B1D";
+                    result = false;
+                }
+            } if (key.includes("EndDateValidity")) {
+                if (!JSON.parse(value)) {
+                    document.querySelector(`.endDateInput_${experienceKey}`).style.borderColor = "#F93B1D";
+                    document.querySelector(`.endDateInput_${experienceKey}`).style.outlineColor = "#F93B1D";
+                    result = false;
+                }
+            }
+        }
+    }
+    return result;
 }
 
 
@@ -415,20 +467,39 @@ function addExperienceForm() {
 
     experienceDescription.append(createdExperienceDiv);
 
+    localStorage.setItem(`newExperiencePositionValidity_${key}`, false)
+
     positionInput.addEventListener("input", (e) => {
+        let result = inputValidation(e, e.target.value);
+        localStorage.setItem(`newExperiencePositionValidity_${key}`, result)
         document.querySelector(`.positionPlaceholder_${key}`).innerHTML = e.target.value;
         localStorage.setItem(`newExperiencePosition_${key}`, e.target.value);
     })
 
+    localStorage.setItem(`newExperienceEmployerValidity_${key}`, false);
+
     employerInput.addEventListener("input", (e) => {
+        let result = inputValidation(e, e.target.value);
+        localStorage.setItem(`newExperienceEmployerValidity_${key}`, result);
         document.querySelector(`.employerPlaceholder_${key}`).innerHTML = ", " + e.target.value;
         localStorage.setItem(`newExperienceEmployer_${key}`, e.target.value);
     })
 
+    localStorage.setItem(`newExperienceDescriptionValidity_${key}`, false);
+
     descriptionInput.addEventListener("input", (e) => {
+        if (e.target.value.trim().length > 0) {
+            removeValidationError(e);
+            localStorage.setItem(`newExperienceDescriptionValidity_${key}`, true);
+        } else {
+            addValidationError(e);
+            localStorage.setItem(`newExperienceDescriptionValidity_${key}`, false);
+        }
         document.querySelector(`.positionDescriptionPlaceholder_${key}`).innerHTML = e.target.value;
         localStorage.setItem(`newExperienceDescription_${key}`, e.target.value);
     })
+
+    localStorage.setItem(`newExperienceStartDateValidity_${key}`, false);
 
     $(startDateInput).datepicker({
         format: "dd/mm/yyyy",
@@ -437,7 +508,10 @@ function addExperienceForm() {
         var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
         document.querySelector(`.startTime_${key}`).innerHTML = formattedDate;
         localStorage.setItem(`newExperienceStartDate_${key}`, formattedDate);
+        localStorage.setItem(`newExperienceStartDateValidity_${key}`, true);
     })
+
+    localStorage.setItem(`newExperienceEndDateValidity_${key}`, false);
 
     $(endDateInput).datepicker({
         format: "dd/mm/yyyy",
@@ -446,6 +520,7 @@ function addExperienceForm() {
         var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
         document.querySelector(`.endTime_${key}`).innerHTML = formattedDate;
         localStorage.setItem(`newExperienceEndDate_${key}`, formattedDate);
+        localStorage.setItem(`newExperienceEndDateValidity_${key}`, true);
     })
 
     const divKey = `experienceDiv-${generateRandomString()}`;
