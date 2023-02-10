@@ -1,42 +1,177 @@
-let counter = 0;
+$(document).ready(function () {
+    let positionInput = $("#positionInput");
+    let employerInput = $("#employerInput");
+    let positionDescription = $("#positionDescription");
+    let addExperience = $("#addExperience");
+    let next = $("#toEducationButton");
 
-document.addEventListener("DOMContentLoaded", () => {
-    let positionInput = document.getElementById("positionInput");
-    let employerInput = document.getElementById("employerInput");
-    let positionDescription = document.getElementById("positionDescription");
+    positionInput.on("input", positionInputValidation);
+    employerInput.on("input", employerInputValidation);
+    positionDescription.on("input", positionDescriptionValidation);
+    addExperience.on("click", addExperienceForm);
+    next.on("click", preventEducationNav);
+    document.querySelectorAll(".startDate").forEach(element => startDateInteraction(element));
+    document.querySelectorAll(".endDate").forEach(element => endDateInteraction(element));
 
-    positionInput.addEventListener("input", positionInputValidation);
-    employerInput.addEventListener("input", employerInputValidation);
-    positionDescription.addEventListener("input", positionDescriptionValidation);
-    document.getElementById("addExperience").addEventListener("click", addExperienceForm);
-    let next = document.getElementById("toEducationButton");
-    next.addEventListener("click", preventEducationNav);
+    retrieveFirstName();
+    retrieveLastName();
+    retrieveImage();
+    retrieveAboutMe();
+    retrieveTel();
+    retrieveEmail();
+    retrievePosition();
+    retrieveEmployer();
+    retrieveStartDate();
+    retrieveEndDate();
+    retrievePositionDescription();
+    retrieveCreatedExperience();
+    checkInputValidity();
+    retrievePositionInputs();
+    retrieveEmployerInputs();
+    retrieveStartDateInputs();
+    retrieveEndDateInputs();    
+    retrievePositionDescriptionInputs();
+    getKeys();
+});
 
-    window.onload = () => {
-        retrieveFirstName();
-        retrieveLastName();
-        retrieveImage();
-        retrieveAboutMe();
-        retrieveTel();
-        retrieveEmail();
-        retrievePosition();
-        retrieveEmployer();
-        retrieveStartDate();
-        retrieveEndDate();
-        retrievePositionDescription();
-        retrieveCreatedExperience();
-        checkInputValidity();
-        document.querySelectorAll(".positionInput").forEach(element => {
-            element.addEventListener("input", positionInputValidation);
+function retrieveStartDateInputs() {
+    document.querySelectorAll('input[class*="startDateInput_"]').forEach(element => {
+        console.log(element)
+        let targetClass = Array.from(element.classList).find(function (className) {
+            return className.startsWith("startDateInput_");
+        });
+        let result = targetClass.slice("startDateInput_".length);
+        $(element).datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+        }).on('changeDate', function (selectedDate) {
+            var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+            document.querySelector(`.startTime_${result}`).innerHTML = formattedDate;
+            localStorage.setItem(`newExperienceStartTime_${result}`, formattedDate);
+            $(this).css("outline", "0.5px solid #98E37E");
+            $(this).css("border", "0.5px solid #98E37E");
         })
-        document.querySelectorAll(".employerInput").forEach(element => {
-            element.addEventListener("input", employerInputValidation);
+    })
+}
+
+function retrieveEndDateInputs() {
+    document.querySelectorAll('input[class*="endDateInput_"]').forEach(element => {
+        let targetClass = Array.from(element.classList).find(function (className) {
+            return className.startsWith("endDateInput_");
+        });
+        let result = targetClass.slice("endDateInput_".length);
+        $(element).datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+        }).on('changeDate', function (selectedDate) {
+            var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+            document.querySelector(`.endTime_${result}`).innerHTML = formattedDate;
+            localStorage.setItem(`newExperienceEndTime_${result}`, formattedDate);
+            $(this).css("outline", "0.5px solid #98E37E");
+            $(this).css("border", "0.5px solid #98E37E");
         })
-        document.querySelectorAll(".positionDescription").forEach(element => {
-            element.addEventListener("input", positionDescriptionValidation);
+    })
+}
+
+
+function retrievePositionInputs() {
+    document.querySelectorAll('input[class*="positionInput_"]').forEach(element => {
+        let targetClass = Array.from(element.classList).find(function (className) {
+            return className.startsWith("positionInput_");
+        });
+        let result = targetClass.slice("positionInput_".length);
+        element.addEventListener("input", e => {
+            document.querySelector(`.positionPlaceholder_${result}`).innerHTML = e.target.value;
+            localStorage.setItem(`newExperiencePosition_${result}`, e.target.value);
         })
+    })
+}
+
+function retrieveEmployerInputs() {
+    document.querySelectorAll('input[class*="employerInput_"]').forEach(element => {
+        let targetClass = Array.from(element.classList).find(function (className) {
+            return className.startsWith("employerInput_");
+        });
+        let result = targetClass.slice("employerInput_".length);
+        element.addEventListener("input", (e) => {
+            document.querySelector(`.employerPlaceholder_${result}`).innerHTML = ", " + e.target.value;
+            localStorage.setItem(`newExperienceEmployer_${result}`, e.target.value);
+        })
+    })
+}
+
+function retrievePositionDescriptionInputs() {
+    document.querySelectorAll('textarea[class*="positionDescriptionInput_"]').forEach(element => {
+        let targetClass = Array.from(element.classList).find(function (className) {
+            return className.startsWith("positionDescriptionInput_");
+        });
+        let result = targetClass.slice("positionDescriptionInput_".length);
+        element.addEventListener("input", (e) => {
+            document.querySelector(`.positionDescriptionPlaceholder_${result}`).innerHTML = e.target.value;
+            localStorage.setItem(`newExperienceDescription_${result}`, e.target.value);
+        })
+    })
+}
+
+function getKeys() {
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith("newExperience")) {
+            console.log(key)
+            const value = localStorage.getItem(key);
+            console.log(value)
+            const experienceKey = key.split("_")[1];
+            if (key.includes("Position")) {
+                document.querySelector(`.positionInput_${experienceKey}`).value = value;
+                document.querySelector(`.positionPlaceholder_${experienceKey}`).innerHTML = value;
+            } if (key.includes("Employer")) {
+                document.querySelector(`.employerInput_${experienceKey}`).value = value;
+                document.querySelector(`.employerPlaceholder_${experienceKey}`).innerHTML = ", " + value;
+            } if (key.includes("Description")) {
+                document.querySelector(`.positionDescriptionInput_${experienceKey}`).value = value;
+                document.querySelector(`.positionDescriptionPlaceholder_${experienceKey}`).innerHTML = value;
+            } if (key.includes("StartDate")) {
+                document.querySelector(`.startDateInput_${experienceKey}`).value = value;
+                document.querySelector(`.startTime_${experienceKey}`).innerHTML = value;
+            } if (key.includes("EndDate")) {
+                document.querySelector(`.endDateInput_${experienceKey}`).value = value;
+                document.querySelector(`.endTime_${experienceKey}`).innerHTML = value;
+            }
+        }
     }
-})
+}
+
+function startDateInteraction(element) {
+    $(element).datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+    }).on('changeDate', function (selectedDate) {
+        var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+        document.getElementById("endTime").innerHTML = formattedDate;
+        localStorage.setItem("endDate", formattedDate);
+        document.getElementById("experienceTitle").style.display = "unset";
+        document.getElementById("endTime").style.display = "unset"
+        localStorage.setItem("endDateValidation", true);
+        $(this).css("outline", "0.5px solid #98E37E");
+        $(this).css("border", "0.5px solid #98E37E");
+    });
+}
+
+function endDateInteraction(element) {
+    $(element).datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+    }).on('changeDate', function (selectedDate) {
+        var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+        document.getElementById("endTime").innerHTML = formattedDate;
+        localStorage.setItem("endDate", formattedDate);
+        document.getElementById("experienceTitle").style.display = "unset";
+        document.getElementById("endTime").style.display = "unset"
+        localStorage.setItem("endDateValidation", true);
+        $(this).css("outline", "0.5px solid #98E37E");
+        $(this).css("border", "0.5px solid #98E37E");
+    });
+}
 
 function preventEducationNav(e) {
     let positionInput = document.getElementById("positionInput");
@@ -160,12 +295,13 @@ function checkInputs() {
 }
 
 function addExperienceForm() {
+    const key = generateRandomString();
     const experienceDescription = document.getElementById("newExperienceDescription");
 
     // Create the position input
     const positionInput = document.createElement("input");
     positionInput.type = "text";
-    positionInput.classList.add("form-control", "form-control-lg", "positionInput");
+    positionInput.classList.add("form-control", "form-control-lg", `positionInput_${key}`);
     positionInput.placeholder = "დეველოპერი, დიზაინერი, ა.შ.";
     positionInput.setAttribute("aria-label", "Position");
 
@@ -190,7 +326,7 @@ function addExperienceForm() {
     // Create the employer input
     const employerInput = document.createElement("input");
     employerInput.type = "text";
-    employerInput.classList.add("form-control", "form-control-lg", "employerInput");
+    employerInput.classList.add("form-control", "form-control-lg", "employerInput", `employerInput_${key}`);
     employerInput.placeholder = "დამსაქმებელი";
     employerInput.setAttribute("aria-label", "Employer");
 
@@ -203,7 +339,7 @@ function addExperienceForm() {
     // create help text
     const employerHelpText = document.createElement("div");
     employerHelpText.classList.add("form-text");
-    employerHelpText.textContent = "მინიმუმ ორი სიმბოლო"
+    employerHelpText.textContent = "მინიმუმ ორი სიმბოლო";
 
     // Create the div for the employer input
     const employerDiv = document.createElement("div");
@@ -215,7 +351,7 @@ function addExperienceForm() {
     // Create the start date input
     const startDateInput = document.createElement("input");
     startDateInput.type = "text";
-    startDateInput.classList.add("form-control", "form-control-lg", "startDate");
+    startDateInput.classList.add("form-control", "form-control-lg", "startDate", `startDateInput_${key}`);
     startDateInput.placeholder = "mm / dd / yyyy";
     startDateInput.setAttribute("aria-label", "Start Date");
 
@@ -241,7 +377,7 @@ function addExperienceForm() {
 
     const endDateInput = document.createElement("input");
     endDateInput.type = "text";
-    endDateInput.classList.add("form-control", "form-control-lg", "date", "endDate");
+    endDateInput.classList.add("form-control", "form-control-lg", `endDateInput_${key}`, "endDate");
     endDateInput.placeholder = "mm / dd / yyyy";
 
     const endDateLabel = document.createElement("label");
@@ -261,7 +397,7 @@ function addExperienceForm() {
     descriptionLabel.textContent = "აღწერა";
 
     const descriptionInput = document.createElement("textarea");
-    descriptionInput.classList.add("form-control", "form-control-lg", "positionDescription");
+    descriptionInput.classList.add("form-control", "form-control-lg", `positionDescriptionInput_${key}`);
     descriptionInput.rows = 3;
     descriptionInput.placeholder = "როლი თანამდებობაზე და ზოგადი აღწერა";
 
@@ -271,17 +407,43 @@ function addExperienceForm() {
     descriptionDiv.appendChild(descriptionInput)
 
     const createdExperienceDiv = document.createElement("div");
-    const key = generateRandomString()
     createdExperienceDiv.classList.add(`createdExperienceDiv-${key}`);
     createdExperienceDiv.append(positionDiv, employerDiv, dateDiv, descriptionDiv);
 
     experienceDescription.append(createdExperienceDiv);
-    
+
     positionInput.addEventListener("input", (e) => {
         document.querySelector(`.positionPlaceholder_${key}`).innerHTML = e.target.value;
+        localStorage.setItem(`newExperiencePosition_${key}`, e.target.value);
     })
 
-    employerInput.addEventListener(input)
+    employerInput.addEventListener("input", (e) => {
+        document.querySelector(`.employerPlaceholder_${key}`).innerHTML = ", " + e.target.value;
+        localStorage.setItem(`newExperienceEmployer_${key}`, e.target.value);
+    })
+
+    descriptionInput.addEventListener("input", (e) => {
+        document.querySelector(`.positionDescriptionPlaceholder_${key}`).innerHTML = e.target.value;
+        localStorage.setItem(`newExperienceDescription_${key}`, e.target.value);
+    })
+
+    $(startDateInput).datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+    }).on("changeDate", (selectedDate) => {
+        var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+        document.querySelector(`.startTime_${key}`).innerHTML = formattedDate;
+        localStorage.setItem(`newExperienceStartDate_${key}`, formattedDate);
+    })
+
+    $(endDateInput).datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+    }).on("changeDate", (selectedDate) => {
+        var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+        document.querySelector(`.endTime_${key}`).innerHTML = formattedDate;
+        localStorage.setItem(`newExperienceEndDate_${key}`, formattedDate);
+    })
 
     const divKey = `experienceDiv-${generateRandomString()}`;
     localStorage.setItem(divKey, createdExperienceDiv.outerHTML);
@@ -451,10 +613,6 @@ function createExperience(key) {
     let experienceTitle = document.createElement('div');
     experienceTitle.className = "mt-3";
 
-    let h5 = document.createElement('h5');
-    h5.innerHTML = "გამოცდილება";
-
-    experienceTitle.appendChild(h5);
     experience.appendChild(experienceTitle);
 
     let dFlex = document.createElement('div');
@@ -478,19 +636,18 @@ function createExperience(key) {
     startTime.classList.add(`startTime_${key}`, "me-2");
 
     let endTime = document.createElement('div');
-    startTime.classList.add(`endTime_${key}`);
+    endTime.classList.add(`endTime_${key}`);
 
     dFlexSecondary.appendChild(startTime);
     dFlexSecondary.appendChild(endTime);
     experience.appendChild(dFlexSecondary);
 
     let resumePositionDescription = document.createElement('div');
-    resumePositionDescription.id = "resumePositionDescription";
-    resumePositionDescription.classList.add(`$positionDescription_${key}`, "mt-2");
+    resumePositionDescription.classList.add(`positionDescriptionPlaceholder_${key}`, "mt-2");
 
     experience.appendChild(resumePositionDescription);
 
-    let experienceDiv = document.querySelector(".resumeInformation")
+    let experienceDiv = document.querySelector("#experience")
 
     experienceDiv.appendChild(experience);
     localStorage.setItem(`createdExperience-${key}`, experience.outerHTML);
