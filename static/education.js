@@ -24,6 +24,7 @@ function getData() {
     retrieveSchoolInputs();
     retrieveDegreeInputs();
     retrieveEndTimeInputs();
+    retrieveEducationDescriptionInputs();
 }
 
 function retrieveCreatedEducation() {
@@ -79,9 +80,11 @@ function getEducationKeys() {
                 document.querySelector(`.degreePlaceholder_${experienceKey}`).innerHTML = ", " + value;
             }
             if (key.includes("EndTime") && !key.includes("Validity")) {
-                console.log(value)
                 document.querySelector(`.endTime_${experienceKey}`).innerHTML = value;
                 document.querySelector(`.endTimeInput_${experienceKey}`).value = value;
+            } if (key.includes("Description") && !key.includes("Validity")) {
+                document.querySelector(`.educationDescriptionInput_${experienceKey}`).value = value;
+                document.querySelector(`.educationDescriptionPlaceholder_${experienceKey}`).innerHTML = value;
             }
         }
     }
@@ -90,7 +93,6 @@ function getEducationKeys() {
 function getExperienceKeys() {
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        console.log(key)
         if (key.startsWith("newExperience")) {
             const value = localStorage.getItem(key);
             const experienceKey = key.split("_")[1];
@@ -141,6 +143,28 @@ function retrieveSchoolInputs() {
                 removeValidationError(e)
             } else {
                 localStorage.setItem(`newEducationSchoolValidity_${result}`, false);
+                addValidationError(e)
+            }
+        })
+    })
+}
+
+function retrieveEducationDescriptionInputs() {
+    document.querySelectorAll('textarea[class*="educationDescriptionInput_"]').forEach(element => {
+        let targetClass = Array.from(element.classList).find(function (className) {
+            return className.startsWith("educationDescriptionInput_");
+        });
+        let result = targetClass.slice("educationDescriptionInput_".length);
+
+        element.addEventListener("input", (e) => {
+            let value = e.target.value;
+            document.querySelector(`.educationDescriptionPlaceholder_${result}`).innerHTML = value;
+            localStorage.setItem(`newEducationDescription_${result}`, value);
+            if (value.trim().length > 0) {
+                localStorage.setItem(`newEducationDescriptionValidity_${result}`, true);
+                removeValidationError(e)
+            } else {
+                localStorage.setItem(`newEducationDescriptionValidity_${result}`, false);
                 addValidationError(e)
             }
         })
@@ -527,6 +551,19 @@ function addNewEducation() {
         localStorage.setItem(`newEducationEndTimeValidity_${key}`, true);
         $(this).css("outline", "0.5px solid #98E37E");
         $(this).css("border", "0.5px solid #98E37E");
+    })
+
+    localStorage.setItem(`newEducationDescriptionValidity_${key}`, false)
+    educationDescriptionTextarea.addEventListener("input", e => {
+        let value = e.target.value;
+        localStorage.setItem(`newEducationDescription_${key}`, value);
+        document.querySelector(`.educationdescriptionPlaceholder_${key}`).innerHTML = value;
+        if (value.trim() > 0) {
+            removeValidationError(e);
+            localStorage.setItem(`newEducationDescriptionValidity_${key}`, true)
+        } else {
+            addValidationError(e);
+        }
     })
 
     const divKey = `educationDiv-${key}`;
