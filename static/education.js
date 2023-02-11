@@ -6,6 +6,8 @@ $(document).ready(() => {
     document.querySelectorAll(".endDate").forEach(element => endDateInteraction(element));
     let educationDescriptionInput = document.getElementById("educationDescriptionInput");
     educationDescriptionInput.addEventListener("input", schoolDescriptionVal);
+    let addEducation = document.getElementById("addEducation");
+    addEducation.addEventListener("click", addNewEducation);
     getGeneralInfo();
     getExperienceInfo();
     getData();
@@ -43,7 +45,7 @@ function retrieveSchoolDescription() {
 }
 
 function updateDropdown(e) {
-    let value =  e.target.innerHTML;
+    let value = e.target.innerHTML;
     let dropdown = document.getElementById("dropdownMenuButton");
     dropdown.innerHTML = value;
     document.getElementById("degree").innerHTML = ", " + value;
@@ -206,4 +208,166 @@ function addValidationError(e) {
 function removeValidationError(e) {
     e.target.classList.add("is-valid");
     e.target.classList.remove("is-invalid");
+}
+
+// Function to generate a random string
+const generateRandomString = () => {
+    return Math.random().toString(36).substring(2, 15);
+};
+
+function addNewEducation() {
+    const schoolContainer = document.createElement("div");
+    schoolContainer.classList.add("mb-4", "mt-4");
+
+    const label = document.createElement("label");
+    label.setAttribute("for", "schoolInput");
+    label.classList.add("form-label");
+    label.innerHTML = "სასწავლებელი";
+    schoolContainer.appendChild(label);
+
+    const input = document.createElement("input");
+    input.setAttribute("type", "text");
+    input.setAttribute("placeholder", "სასწავლებელი");
+    input.setAttribute("aria-label", "School");
+    input.classList.add("form-control", "form-control-lg", "schoolInput");
+    schoolContainer.appendChild(input);
+
+    const formText = document.createElement("div");
+    formText.classList.add("form-text");
+    formText.innerHTML = "მინიმუმ ორი სიმბოლო";
+    schoolContainer.appendChild(formText);
+
+    // Create main container
+    const mainContainer = document.createElement("div");
+    mainContainer.classList.add("d-flex", "mb-4", "justify-content-between", "me-2");
+
+    // Create dropdown container
+    const dropdownContainer = document.createElement("div");
+    dropdownContainer.classList.add("dropdown");
+    dropdownContainer.style.marginTop = "35px";
+
+    // Create dropdown button
+    const dropdownButton = document.createElement("button");
+    dropdownButton.classList.add("btn", "btn-light", "dropdown-toggle");
+    dropdownButton.type = "button";
+    dropdownButton.setAttribute("data-toggle", "dropdown");
+    dropdownButton.setAttribute("aria-haspopup", "true");
+    dropdownButton.setAttribute("aria-expanded", "false");
+    dropdownButton.style.backgroundColor = "#ffff";
+    dropdownButton.style.width = "320px";
+    dropdownButton.style.height = "45px";
+    dropdownButton.textContent = "აირჩიეთ ხარისხი";
+
+    // Create dropdown menu
+    const dropdownMenu = document.createElement("div");
+    dropdownMenu.classList.add("dropdown-menu");
+    dropdownMenu.setAttribute("aria-labelledby", "dropdownMenuButton");
+
+    // Create dropdown items
+    const dropdownItem1 = document.createElement("a");
+    dropdownItem1.classList.add("dropdown-item");
+    dropdownItem1.href = "#";
+    dropdownItem1.textContent = "საშუალო სკოლის დიპლომი";
+
+    const dropdownItem2 = document.createElement("a");
+    dropdownItem2.classList.add("dropdown-item");
+    dropdownItem2.href = "#";
+    dropdownItem2.textContent = "ზოგადსაგანმანათებლო დიპლომი";
+
+    const dropdownItem3 = document.createElement("a");
+    dropdownItem3.classList.add("dropdown-item");
+    dropdownItem3.href = "#";
+    dropdownItem3.textContent = "ბაკალავრი";
+
+    const dropdownItem4 = document.createElement("a");
+    dropdownItem4.classList.add("dropdown-item");
+    dropdownItem4.href = "#";
+    dropdownItem4.textContent = "მაგისტრატი";
+
+    const dropdownItem5 = document.createElement("a");
+    dropdownItem5.className = "dropdown-item";
+    dropdownItem5.href = "#";
+    dropdownItem5.innerHTML = "დოქტორი";
+
+    const dropdownItem6 = document.createElement("a");
+    dropdownItem6.className = "dropdown-item";
+    dropdownItem6.href = "#";
+    dropdownItem6.innerHTML = "ასოცირებული ხარისხი";
+
+    const dropdownItem7 = document.createElement("a");
+    dropdownItem7.className = "dropdown-item";
+    dropdownItem7.href = "#";
+    dropdownItem7.innerHTML = "სტუდენტი";
+
+    const dropdownItem8 = document.createElement("a");
+    dropdownItem8.className = "dropdown-item";
+    dropdownItem8.href = "#";
+    dropdownItem8.innerHTML = "კოლეჯი (ხარისხის გარეშე)";
+
+    const dropdownItem9 = document.createElement("a");
+    dropdownItem9.className = "dropdown-item";
+    dropdownItem9.href = "#";
+    dropdownItem9.innerHTML = "სხვა";
+
+    dropdownMenu.appendChild(dropdownItem1);
+    dropdownMenu.appendChild(dropdownItem2);
+    dropdownMenu.appendChild(dropdownItem3);
+    dropdownMenu.appendChild(dropdownItem4);
+    dropdownMenu.appendChild(dropdownItem5);
+    dropdownMenu.appendChild(dropdownItem6);
+    dropdownMenu.appendChild(dropdownItem7);
+    dropdownMenu.appendChild(dropdownItem8);
+    dropdownMenu.appendChild(dropdownItem9);
+
+    dropdownContainer.appendChild(dropdownButton);
+    dropdownContainer.appendChild(dropdownMenu);
+
+    // Append dropdown container to main container
+    mainContainer.appendChild(dropdownContainer);
+
+    const endTimeDiv = document.createElement("div");
+
+    const endTimeLabel = document.createElement("label");
+    endTimeLabel.setAttribute("for", "date");
+    endTimeLabel.innerText = "დამთავრების რიცხვი";
+
+    const endTimeInput = document.createElement("input");
+    endTimeInput.setAttribute("type", "text");
+    endTimeInput.setAttribute("class", "form-control date form-control-lg endDate");
+    endTimeInput.setAttribute("id", "endDate");
+    endTimeInput.setAttribute("placeholder", "mm / dd / yyyy");
+
+    endTimeDiv.appendChild(endTimeLabel);
+    endTimeDiv.appendChild(endTimeInput);
+
+    mainContainer.appendChild(endTimeDiv);
+
+    const educationDescriptionDiv = document.createElement("div");
+    educationDescriptionDiv.classList.add("mb-4");
+
+    const educationDescriptionLabel = document.createElement("label");
+    educationDescriptionLabel.setAttribute("for", "educationDescriptionInput");
+    educationDescriptionLabel.classList.add("form-label");
+    educationDescriptionLabel.innerHTML = "აღწერა";
+
+    const educationDescriptionTextarea = document.createElement("textarea");
+    educationDescriptionTextarea.classList.add("form-control");
+    educationDescriptionTextarea.classList.add("form-control-lg");
+    educationDescriptionTextarea.setAttribute("rows", "3");
+    educationDescriptionTextarea.setAttribute("placeholder", "განათლების აღწერა");
+
+    educationDescriptionDiv.appendChild(educationDescriptionLabel);
+    educationDescriptionDiv.appendChild(educationDescriptionTextarea);
+
+    mainContainer.appendChild(educationDescriptionDiv);
+
+    const newEducationDescription = document.createElement('div');
+    newEducationDescription.classList.add("light-top-border");
+    newEducationDescription.append(schoolContainer);
+    newEducationDescription.append(mainContainer);
+    newEducationDescription.appendChild(educationDescriptionDiv);
+
+    // Append main container to the body of the page
+    const newEducationWrapper = document.getElementById("newEducationDescription")
+    newEducationWrapper.appendChild(newEducationDescription);
 }
