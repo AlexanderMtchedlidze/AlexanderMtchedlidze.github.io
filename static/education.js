@@ -23,6 +23,7 @@ function getData() {
     getEducationKeys();
     retrieveSchoolInputs();
     retrieveDegreeInputs();
+    retrieveEndTimeInputs();
 }
 
 function retrieveCreatedEducation() {
@@ -43,6 +44,26 @@ function retrieveCreatedEducation() {
     });
 }
 
+function retrieveEndTimeInputs() {
+    document.querySelectorAll('input[class*="endTimeInput_"]').forEach(element => {
+        let targetClass = Array.from(element.classList).find(function (className) {
+            return className.startsWith("endTimeInput_");
+        });
+        let result = targetClass.slice("endTimeInput_".length);
+        $(element).datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+        }).on('changeDate', function (selectedDate) {
+            var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+            document.querySelector(`.endTime_${result}`).innerHTML = formattedDate;
+            localStorage.setItem(`newEducationEndTime_${result}`, formattedDate);
+            localStorage.setItem(`newEducationEndTimeValidity_${result}`, true);
+            $(this).css("outline", "0.5px solid #98E37E");
+            $(this).css("border", "0.5px solid #98E37E");
+        })
+    })
+}
+
 function getEducationKeys() {
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
@@ -57,6 +78,11 @@ function getEducationKeys() {
                 document.querySelector(`.dropdownInput_${experienceKey}`).innerHTML = value;
                 document.querySelector(`.degreePlaceholder_${experienceKey}`).innerHTML = ", " + value;
             }
+            if (key.includes("EndTime") && !key.includes("Validity")) {
+                console.log(value)
+                document.querySelector(`.endTime_${experienceKey}`).innerHTML = value;
+                document.querySelector(`.endTimeInput_${experienceKey}`).value = value;
+            }
         }
     }
 }
@@ -64,6 +90,7 @@ function getEducationKeys() {
 function getExperienceKeys() {
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
+        console.log(key)
         if (key.startsWith("newExperience")) {
             const value = localStorage.getItem(key);
             const experienceKey = key.split("_")[1];
@@ -106,9 +133,10 @@ function retrieveSchoolInputs() {
         });
         let result = targetClass.slice("schoolInput_".length);
         element.addEventListener("input", (e) => {
-            document.querySelector(`.schoolPlaceholder_${result}`).innerHTML = e.target.value;
-            localStorage.setItem(`newEducationSchool_${result}`, e.target.value);
-            if (e.target.value > 1) {
+            let value = e.target.value;
+            document.querySelector(`.schoolPlaceholder_${result}`).innerHTML = value;
+            localStorage.setItem(`newEducationSchool_${result}`, value);
+            if (value.trim().length > 1) {
                 localStorage.setItem(`newEducationSchoolValidity_${result}`, true);
                 removeValidationError(e)
             } else {
@@ -428,8 +456,7 @@ function addNewEducation() {
 
     const endTimeInput = document.createElement("input");
     endTimeInput.setAttribute("type", "text");
-    endTimeInput.setAttribute("class", "form-control date form-control-lg endDate", `endTimeInput_${key}`);
-    endTimeInput.setAttribute("id", "endDate");
+    endTimeInput.setAttribute("class", `form-control date form-control-lg endDate endTimeInput_${key}`);
     endTimeInput.setAttribute("placeholder", "mm / dd / yyyy");
 
     endTimeDiv.appendChild(endTimeLabel);
@@ -467,9 +494,10 @@ function addNewEducation() {
 
     localStorage.setItem(`newEducationSchoolValidity_${key}`, false)
     schoolInput.addEventListener("input", (e) => {
-        localStorage.setItem(`newEducationSchool_${key}`, e.target.value);
-        document.querySelector(`.schoolPlaceholder_${key}`).innerHTML = e.target.value;
-        if (e.target.value.trim() > 1) {
+        let value = e.target.value;
+        localStorage.setItem(`newEducationSchool_${key}`, value);
+        document.querySelector(`.schoolPlaceholder_${key}`).innerHTML = value;
+        if (value.trim() > 1) {
             removeValidationError(e);
             localStorage.setItem(`newEducationSchoolValidity_${key}`, true)
         } else {
@@ -486,6 +514,19 @@ function addNewEducation() {
             localStorage.setItem(`newEducationDegreeValidity_${key}`, true);
             removeValidationError(e);
         })
+    })
+
+    localStorage.setItem(`newExperienceEndTimeValidity_${key}`, false);
+    $(endTimeInput).datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+    }).on("changeDate", (selectedDate) => {
+        var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+        document.querySelector(`.endTime_${key}`).innerHTML = formattedDate;
+        localStorage.setItem(`newEducationEndTime_${key}`, formattedDate);
+        localStorage.setItem(`newEducationEndTimeValidity_${key}`, true);
+        $(this).css("outline", "0.5px solid #98E37E");
+        $(this).css("border", "0.5px solid #98E37E");
     })
 
     const divKey = `educationDiv-${key}`;
