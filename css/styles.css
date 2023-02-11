@@ -59,3 +59,7 @@ body {
 .light-top-border {
     border-top: 1px solid #C8C8C8;
 }
+
+.title {
+    color: #F93B1D;
+}

@@ -109,9 +109,7 @@ function emailValidation(e) {
     let resumeEmail = document.getElementById("resumeEmail");
     resumeEmail.innerHTML = email;
 
-    let atIndex = email.indexOf("@");
-    let domain = email.substring(atIndex + 1);
-    let validationResult = domain === "redberry.ge";
+    let validationResult = email.endsWith("@redberry.ge") && email.length > 12;
     let envelopeIcon = document.getElementById("envelopeIcon");
     inputValidation(e, validationResult);
 
