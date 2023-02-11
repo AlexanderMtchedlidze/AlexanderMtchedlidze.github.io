@@ -1,14 +1,22 @@
 $(document).ready(() => {
+    let schoolInput = document.getElementById("schoolInput");
+    schoolInput.addEventListener("input", schoolInputVal);
     let dropdownItems = document.querySelectorAll(".dropdown-item");
     dropdownItems.forEach(element => element.addEventListener("click", updateDropdown))
     document.querySelectorAll(".endDate").forEach(element => endDateInteraction(element));
+    let schoolDescription = document.getElementById("schoolDescription");
+    schoolDescription.addEventListener("input", schoolDescriptionVal);
     getGeneralInfo();
     getExperienceInfo();
 })
 
 function updateDropdown(e) {
+    let value =  e.target.innerHTML;
     let dropdown = document.getElementById("dropdownMenuButton");
-    dropdown.innerHTML = e.target.innerHTML;
+    dropdown.innerHTML = value;
+    document.getElementById("degree").innerHTML = ", " + value;
+    localStorage.setItem("dropdown", value);
+    localStorage.setItem("dropdownVal", true);
 }
 
 function getGeneralInfo() {
@@ -124,12 +132,47 @@ function endDateInteraction(element) {
         autoclose: true,
     }).on('changeDate', function (selectedDate) {
         var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
-        document.getElementById("endTime").innerHTML = formattedDate;
-        localStorage.setItem("endDate", formattedDate);
-        document.getElementById("experienceTitle").style.display = "unset";
-        document.getElementById("endTime").style.display = "unset"
-        localStorage.setItem("endDateValidation", true);
+        console.log(document.getElementById("endTime    "))
+        document.getElementById("educationEndTime").innerHTML = formattedDate;
+        localStorage.setItem("educationEndtime", formattedDate);
+        localStorage.setItem("educationEndTimeValidation", true);
         $(this).css("outline", "0.5px solid #98E37E");
         $(this).css("border", "0.5px solid #98E37E");
     });
+}
+
+function schoolDescriptionVal(e) {
+    let description = e.target.value;
+    localStorage.setItem("schoolDescription", description);
+    localStorage.setItem("schoolDescriptionVal", false);
+    document.getElementById("educationDescription").innerHTML = description;
+    if (description.trim().length > 0) {
+        removeValidationError(e);
+        localStorage.setItem("schoolDescriptionVal", true);
+    } else {
+        addValidationError(e);
+    }
+}
+
+function schoolInputVal(e) {
+    let school = e.target.value;
+    localStorage.setItem("school", school);
+    localStorage.setItem("schoolVal", false);
+    document.getElementById("school").innerHTML = school;
+    if (school.trim().length > 1) {
+        removeValidationError(e);
+        localStorage.setItem("schoolVal", true);
+    } else {
+        addValidationError(e);
+    }
+}
+
+function addValidationError(e) {
+    e.target.classList.remove("is-valid");
+    e.target.classList.add("is-invalid");
+}
+
+function removeValidationError(e) {
+    e.target.classList.add("is-valid");
+    e.target.classList.remove("is-invalid");
 }
