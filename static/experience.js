@@ -616,7 +616,9 @@ function retrieveEmployer() {
     let employer = localStorage.getItem("employer");
     let resumeEmployer = document.getElementById("employer");
     employerInput.value = employer;
-    resumeEmployer.innerHTML = ", " + employer;
+    if (employer) {
+        resumeEmployer.innerHTML = ", " + employer;
+    }
 }
 
 function retrieveStartDate() {

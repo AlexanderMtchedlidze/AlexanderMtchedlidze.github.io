@@ -144,7 +144,7 @@ function retrievePosition() {
 function retrieveEmployer() {
     let employer = localStorage.getItem("employer");
     let resumeEmployer = document.getElementById("employer");
-    resumeEmployer.innerHTML = employer;
+    resumeEmployer.innerHTML = ", " + employer;
 }
 
 function retrieveStartDate() {
@@ -231,21 +231,22 @@ const generateRandomString = () => {
 };
 
 function addNewEducation() {
+    const key = generateRandomString();
     const schoolContainer = document.createElement("div");
     schoolContainer.classList.add("mb-4", "mt-4");
 
-    const label = document.createElement("label");
-    label.setAttribute("for", "schoolInput");
-    label.classList.add("form-label");
-    label.innerHTML = "სასწავლებელი";
-    schoolContainer.appendChild(label);
+    const schoolLabel = document.createElement("label");
+    schoolLabel.setAttribute("for", "schoolInput");
+    schoolLabel.classList.add("form-label");
+    schoolLabel.innerHTML = "სასწავლებელი";
+    schoolContainer.appendChild(schoolLabel);
 
-    const input = document.createElement("input");
-    input.setAttribute("type", "text");
-    input.setAttribute("placeholder", "სასწავლებელი");
-    input.setAttribute("aria-label", "School");
-    input.classList.add("form-control", "form-control-lg", "schoolInput");
-    schoolContainer.appendChild(input);
+    const schoolInput = document.createElement("input");
+    schoolInput.setAttribute("type", "text");
+    schoolInput.setAttribute("placeholder", "სასწავლებელი");
+    schoolInput.setAttribute("aria-label", "School");
+    schoolInput.classList.add("form-control", "form-control-lg", "schoolInput", `schoolInput_${key}`);
+    schoolContainer.appendChild(schoolInput);
 
     const formText = document.createElement("div");
     formText.classList.add("form-text");
@@ -263,7 +264,7 @@ function addNewEducation() {
 
     // Create dropdown button
     const dropdownButton = document.createElement("button");
-    dropdownButton.classList.add("btn", "btn-light", "dropdown-toggle");
+    dropdownButton.classList.add("btn", "btn-light", "dropdown-toggle", `dropdownInput_${key}`);
     dropdownButton.type = "button";
     dropdownButton.setAttribute("data-toggle", "dropdown");
     dropdownButton.setAttribute("aria-haspopup", "true");
@@ -348,7 +349,7 @@ function addNewEducation() {
 
     const endTimeInput = document.createElement("input");
     endTimeInput.setAttribute("type", "text");
-    endTimeInput.setAttribute("class", "form-control date form-control-lg endDate");
+    endTimeInput.setAttribute("class", "form-control date form-control-lg endDate", `endTimeInput_${key}`);
     endTimeInput.setAttribute("id", "endDate");
     endTimeInput.setAttribute("placeholder", "mm / dd / yyyy");
 
@@ -366,8 +367,7 @@ function addNewEducation() {
     educationDescriptionLabel.innerHTML = "აღწერა";
 
     const educationDescriptionTextarea = document.createElement("textarea");
-    educationDescriptionTextarea.classList.add("form-control");
-    educationDescriptionTextarea.classList.add("form-control-lg");
+    educationDescriptionTextarea.classList.add("form-control", "form-control-lg", `educationDescriptionInput_${key}`);
     educationDescriptionTextarea.setAttribute("rows", "3");
     educationDescriptionTextarea.setAttribute("placeholder", "განათლების აღწერა");
 
@@ -377,7 +377,7 @@ function addNewEducation() {
     mainContainer.appendChild(educationDescriptionDiv);
 
     const newEducationDescription = document.createElement('div');
-    newEducationDescription.classList.add("light-top-border");
+    newEducationDescription.classList.add("light-top-border", `createdEducationDiv_${key}`);
     newEducationDescription.append(schoolContainer);
     newEducationDescription.append(mainContainer);
     newEducationDescription.appendChild(educationDescriptionDiv);
@@ -386,23 +386,45 @@ function addNewEducation() {
     const newEducationWrapper = document.getElementById("newEducationDescription")
     newEducationWrapper.appendChild(newEducationDescription);
 
-    createNewEducationPanel();
+    createNewEducationPanel(key);
+
+    localStorage.setItem(`newEducationSchoolValidity_${key}`, false)
+    schoolInput.addEventListener("input", e => {
+        localStorage.setItem(`newEducationSchool_${key}`, e.target.value);
+        document.querySelector(`.schoolPlaceholder_${key}`).innerHTML = e.target.value;
+        if (e.target.value.trim() > 1) {
+            removeValidationError(e);
+            localStorage.setItem(`newEducationSchoolValidity_${key}`, true)
+        } else {
+            addValidationError(e);
+        }
+    })
+
+    localStorage.setItem(`newEducationDegreeValidity_${key}`, false);
+    dropdownButton.addEventListener("click", e => {
+        document.querySelector(`dropdownInput_${key}`).innerHTML = e.target.value;
+        document.querySelector(`.degreePlacholder_${key}`).innerHTML = ", " + e.target.value;
+        localStorage.setItem(`newEducationDegree_${key}`, e.target.innerHTML);
+        localStorage.setItem(`newEducationDegreeValidity_${key}`, true);
+        removeValidationError(e);
+    })
 }
 
-function createNewEducationPanel() {
+function createNewEducationPanel(key) {
     const school = document.createElement("div");
-    school.classList.add("d-flex", "font-italic");
+    school.classList.add("d-flex", "font-italic", `.schoolPlaceholder_${key}`);
     school.style.fontWeight = "bold";
 
     const degree = document.createElement("div");
+    degree.classList.add(`.degreePlaceholder_${key}`);
 
     school.appendChild(degree);
 
     const educationEndTime = document.createElement("div");
-    educationEndTime.classList.add("d-flex", "text-secondary");
+    educationEndTime.classList.add("d-flex", "text-secondary", `.endTime_${key}`);
 
     const educationDescription = document.createElement("div");
-    educationDescription.classList.add("mt-2");
+    educationDescription.classList.add("mt-2", `.educationDescriptionPlaceholder_${key}`);
 
     const newEducationPanel = document.getElementById("createdEducation");
     newEducationPanel.append(school);
