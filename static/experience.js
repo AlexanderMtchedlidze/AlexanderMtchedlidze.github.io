@@ -509,6 +509,8 @@ function addExperienceForm() {
         document.querySelector(`.startTime_${key}`).innerHTML = formattedDate;
         localStorage.setItem(`newExperienceStartDate_${key}`, formattedDate);
         localStorage.setItem(`newExperienceStartDateValidity_${key}`, true);
+        $(this).css("outline", "0.5px solid #98E37E");
+        $(this).css("border", "0.5px solid #98E37E");
     })
 
     localStorage.setItem(`newExperienceEndDateValidity_${key}`, false);
@@ -521,6 +523,8 @@ function addExperienceForm() {
         document.querySelector(`.endTime_${key}`).innerHTML = formattedDate;
         localStorage.setItem(`newExperienceEndDate_${key}`, formattedDate);
         localStorage.setItem(`newExperienceEndDateValidity_${key}`, true);
+        $(this).css("outline", "0.5px solid #98E37E");
+        $(this).css("border", "0.5px solid #98E37E");
     })
 
     const divKey = `experienceDiv-${generateRandomString()}`;

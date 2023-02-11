@@ -18,6 +18,28 @@ function getData() {
     retrieveDropdown();
     retrieveEducationEndTime();
     retrieveSchoolDescription();
+    getExperienceKeys();
+}
+
+function getExperienceKeys() {
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith("newExperience")) {
+            const value = localStorage.getItem(key);
+            const experienceKey = key.split("_")[1];
+            if (key.includes("Position") && !key.includes("Validity")) {
+                document.querySelector(`.positionPlaceholder_${experienceKey}`).innerHTML = value;
+            } if (key.includes("Employer") && !key.includes("Validity")) {
+                document.querySelector(`.employerPlaceholder_${experienceKey}`).innerHTML = ", " + value;
+            } if (key.includes("Description") && !key.includes("Validity")) {
+                document.querySelector(`.positionDescriptionPlaceholder_${experienceKey}`).innerHTML = value;
+            } if (key.includes("StartDate") && !key.includes("Validity")) {
+                document.querySelector(`.startTime_${experienceKey}`).innerHTML = value;
+            } if (key.includes("EndDate") && !key.includes("Validity")) {
+                document.querySelector(`.endTime_${experienceKey}`).innerHTML = value;
+            }
+        }
+    }
 }
 
 function retrieveSchool() {
@@ -145,17 +167,10 @@ function retrievePositionDescription() {
 }
 
 function retrieveCreatedExperience() {
-    const keys = Object.keys(localStorage).filter(key => key.startsWith('experienceDiv-'));
-    const keys2 = Object.keys(localStorage).filter(key => key.startsWith("createdExperience-"))
-    keys.forEach(key => {
+    const createdExperienceKeys = Object.keys(localStorage).filter(key => key.startsWith("createdExperience-"))
+    createdExperienceKeys.forEach(key => {
         const divString = localStorage.getItem(key);
-        const experienceDescription = document.getElementById("newExperienceDescription");
-        experienceDescription.innerHTML += divString;
-    });
-
-    keys2.forEach(key => {
-        const divString = localStorage.getItem(key);
-        const experienceDescription = document.getElementById("experience");
+        const experienceDescription = document.getElementById("createdExperience");
         experienceDescription.innerHTML += divString;
     });
 }
@@ -370,4 +385,28 @@ function addNewEducation() {
     // Append main container to the body of the page
     const newEducationWrapper = document.getElementById("newEducationDescription")
     newEducationWrapper.appendChild(newEducationDescription);
+
+    createNewEducationPanel();
+}
+
+function createNewEducationPanel() {
+    const school = document.createElement("div");
+    school.classList.add("d-flex", "font-italic");
+    school.style.fontWeight = "bold";
+
+    const degree = document.createElement("div");
+
+    school.appendChild(degree);
+
+    const educationEndTime = document.createElement("div");
+    educationEndTime.classList.add("d-flex", "text-secondary");
+
+    const educationDescription = document.createElement("div");
+    educationDescription.classList.add("mt-2");
+
+    const newEducationPanel = document.getElementById("createdEducation");
+    newEducationPanel.append(school);
+    newEducationPanel.append(degree);
+    newEducationPanel.append(educationEndTime);
+    newEducationPanel.append(educationDescription);
 }
