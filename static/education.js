@@ -10,8 +10,8 @@ $(document).ready(() => {
     addEducation.addEventListener("click", addNewEducation);
     getGeneralInfo();
     getExperienceInfo();
-    getData();
     fetchDegrees();
+    getData();
 })
 
 function fetchDegrees() {
@@ -24,6 +24,16 @@ function fetchDegrees() {
                 dropdownItem.classList.add("dropdown-item");
                 dropdownItem.textContent = item.title;
                 dropdownMenu.appendChild(dropdownItem);
+
+                dropdownItem.addEventListener("click", e => {
+                    removeValidationError(e);
+                    let value = e.target.innerHTML;
+                    let dropdown = document.getElementById("dropdownMenuButton");
+                    document.getElementById("degree").innerHTML = ", " + value;
+                    dropdown.innerHTML = value;
+                    localStorage.setItem("dropdownVal", true);
+                    localStorage.setItem("dropdown", value);
+                })
             });
         })
         .catch(error => console.error(error));
@@ -38,7 +48,7 @@ function getData() {
     retrieveCreatedEducation();
     getEducationKeys();
     retrieveSchoolInputs();
-    retrieveDegreeInputs();
+    retrieveDegrees();
     retrieveEndTimeInputs();
     retrieveEducationDescriptionInputs();
 }
@@ -127,20 +137,33 @@ function getExperienceKeys() {
     }
 }
 
-
-function retrieveDegreeInputs() {
-    document.querySelectorAll(`a[class*=dropdown-item_]`).forEach(element => {
+function retrieveDegrees() {
+    document.querySelectorAll(`button[class*=dropdownInput_]`).forEach(element => {
         let targetClass = Array.from(element.classList).find(function (className) {
-            return className.startsWith("dropdown-item_");
+            return className.startsWith("dropdownInput_");
         });
-        let result = targetClass.slice("dropdown-item_".length);
-        element.addEventListener("click", e => {
-            document.querySelector(`.dropdownInput_${result}`).innerHTML = e.target.innerHTML
-            document.querySelector(`.degreePlaceholder_${result}`).innerHTML = ", " + e.target.innerHTML;
-            localStorage.setItem(`newEducationDegree_${result}`, e.target.innerHTML);
-            localStorage.setItem(`newEducationDegreeValidity_${result}`, true);
-            removeValidationError(e);
-        })
+        let result = targetClass.slice("dropdownInput_".length);
+
+        fetch("https://resume.redberryinternship.ge/api/degrees")
+            .then(response => response.json())
+            .then(data => {
+                const dropdownMenu = document.querySelector(`.dropdown-menu_${result}`);
+                data.forEach(item => {
+                    const dropdownItem = document.createElement("a");
+                    dropdownItem.classList.add("dropdown-item", `dropdown-item_${result}`);
+                    dropdownItem.textContent = item.title;
+                    dropdownMenu.appendChild(dropdownItem);
+
+                    dropdownItem.addEventListener("click", e => {
+                        document.querySelector(`.dropdownInput_${result}`).innerHTML = e.target.innerHTML
+                        document.querySelector(`.degreePlaceholder_${result}`).innerHTML = ", " + e.target.innerHTML;
+                        localStorage.setItem(`newEducationDegree_${result}`, e.target.innerHTML);
+                        localStorage.setItem(`newEducationDegreeValidity_${result}`, true);
+                        removeValidationError(e);
+                    })
+                });
+            })
+            .catch(error => console.error(error));
     })
 }
 
@@ -196,7 +219,7 @@ function retrieveSchool() {
 function retrieveDropdown() {
     let dropdown = localStorage.getItem("dropdown");
     if (dropdown) {
-        document.getElementById("dropdownMenuButton").innerHTML = dropdown;x
+        document.getElementById("dropdownMenuButton").innerHTML = dropdown;
         document.getElementById("degree").innerHTML = ", " + dropdown;
     }
 }
@@ -423,64 +446,29 @@ function addNewEducation() {
 
     // Create dropdown menu
     const dropdownMenu = document.createElement("div");
-    dropdownMenu.classList.add("dropdown-menu");
+    dropdownMenu.classList.add("dropdown-menu", `dropdown-menu_${key}`);
     dropdownMenu.setAttribute("aria-labelledby", "dropdownMenuButton");
 
-    // Create dropdown items
-    const dropdownItem1 = document.createElement("a");
-    dropdownItem1.classList.add("dropdown-item", `dropdown-item_${key}`);
-    dropdownItem1.href = "#";
-    dropdownItem1.textContent = "საშუალო სკოლის დიპლომი";
+    fetch("https://resume.redberryinternship.ge/api/degrees")
+        .then(response => response.json())
+        .then(data => {
+            const dropdownMenu = document.querySelector(`.dropdown-menu_${key}`);
+            data.forEach(item => {
+                const dropdownItem = document.createElement("a");
+                dropdownItem.classList.add("dropdown-item", `dropdown-item_${key}`);
+                dropdownItem.textContent = item.title;
+                dropdownMenu.appendChild(dropdownItem);
 
-    const dropdownItem2 = document.createElement("a");
-    dropdownItem2.classList.add("dropdown-item", `dropdown-item_${key}`);
-    dropdownItem2.href = "#";
-    dropdownItem2.textContent = "ზოგადსაგანმანათებლო დიპლომი";
-
-    const dropdownItem3 = document.createElement("a");
-    dropdownItem3.classList.add("dropdown-item", `dropdown-item_${key}`);
-    dropdownItem3.href = "#";
-    dropdownItem3.textContent = "ბაკალავრი";
-
-    const dropdownItem4 = document.createElement("a");
-    dropdownItem4.classList.add("dropdown-item", `dropdown-item_${key}`);
-    dropdownItem4.href = "#";
-    dropdownItem4.textContent = "მაგისტრატი";
-
-    const dropdownItem5 = document.createElement("a");
-    dropdownItem5.classList.add("dropdown-item", `dropdown-item_${key}`);
-    dropdownItem5.href = "#";
-    dropdownItem5.innerHTML = "დოქტორი";
-
-    const dropdownItem6 = document.createElement("a");
-    dropdownItem6.classList.add("dropdown-item", `dropdown-item_${key}`);
-    dropdownItem6.href = "#";
-    dropdownItem6.innerHTML = "ასოცირებული ხარისხი";
-
-    const dropdownItem7 = document.createElement("a");
-    dropdownItem7.classList.add("dropdown-item", `dropdown-item_${key}`);
-    dropdownItem7.href = "#";
-    dropdownItem7.innerHTML = "სტუდენტი";
-
-    const dropdownItem8 = document.createElement("a");
-    dropdownItem8.classList.add("dropdown-item", `dropdown-item_${key}`);
-    dropdownItem8.href = "#";
-    dropdownItem8.innerHTML = "კოლეჯი (ხარისხის გარეშე)";
-
-    const dropdownItem9 = document.createElement("a");
-    dropdownItem9.classList.add("dropdown-item", `dropdown-item_${key}`);
-    dropdownItem9.href = "#";
-    dropdownItem9.innerHTML = "სხვა";
-
-    dropdownMenu.appendChild(dropdownItem1);
-    dropdownMenu.appendChild(dropdownItem2);
-    dropdownMenu.appendChild(dropdownItem3);
-    dropdownMenu.appendChild(dropdownItem4);
-    dropdownMenu.appendChild(dropdownItem5);
-    dropdownMenu.appendChild(dropdownItem6);
-    dropdownMenu.appendChild(dropdownItem7);
-    dropdownMenu.appendChild(dropdownItem8);
-    dropdownMenu.appendChild(dropdownItem9);
+                dropdownItem.addEventListener("click", e => {
+                    document.querySelector(`.dropdownInput_${key}`).innerHTML = e.target.innerHTML
+                    document.querySelector(`.degreePlaceholder_${key}`).innerHTML = ", " + e.target.innerHTML;
+                    localStorage.setItem(`newEducationDegree_${key}`, e.target.innerHTML);
+                    localStorage.setItem(`newEducationDegreeValidity_${key}`, true);
+                    removeValidationError(e);
+                })
+            });
+        })
+        .catch(error => console.error(error));
 
     dropdownContainer.appendChild(dropdownButton);
     dropdownContainer.appendChild(dropdownMenu);
@@ -591,10 +579,10 @@ function addNewEducation() {
 function createNewEducationPanel(key) {
     const flex = document.createElement('div');
     flex.classList.add("d-flex");
+    flex.style.fontWeight = "bold";
 
     const school = document.createElement("div");
     school.classList.add(`schoolPlaceholder_${key}`);
-    school.style.fontWeight = "bold";
     flex.appendChild(school)
 
     const degree = document.createElement("div");
