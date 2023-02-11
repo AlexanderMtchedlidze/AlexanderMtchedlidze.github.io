@@ -11,7 +11,23 @@ $(document).ready(() => {
     getGeneralInfo();
     getExperienceInfo();
     getData();
+    fetchDegrees();
 })
+
+function fetchDegrees() {
+    fetch("https://resume.redberryinternship.ge/api/degrees")
+        .then(response => response.json())
+        .then(data => {
+            const dropdownMenu = document.querySelector(".dropdown-menu");
+            data.forEach(item => {
+                const dropdownItem = document.createElement("a");
+                dropdownItem.classList.add("dropdown-item");
+                dropdownItem.textContent = item.title;
+                dropdownMenu.appendChild(dropdownItem);
+            });
+        })
+        .catch(error => console.error(error));
+}
 
 function getData() {
     retrieveSchool();
@@ -179,8 +195,8 @@ function retrieveSchool() {
 
 function retrieveDropdown() {
     let dropdown = localStorage.getItem("dropdown");
-    document.getElementById("dropdownMenuButton").innerHTML = dropdown;
     if (dropdown) {
+        document.getElementById("dropdownMenuButton").innerHTML = dropdown;x
         document.getElementById("degree").innerHTML = ", " + dropdown;
     }
 }
