@@ -19,6 +19,25 @@ function getData() {
     retrieveEducationEndTime();
     retrieveSchoolDescription();
     getExperienceKeys();
+    retrieveCreatedEducation();
+}
+
+function retrieveCreatedEducation() {
+    const educations = Object.keys(localStorage).filter(key => key.startsWith('educationDiv-'));
+    const educationPanels = Object.keys(localStorage).filter(key => key.startsWith('educationPanelDiv-'));
+
+    // Iterate over the keys and retrieve the div elements from local storage
+    educations.forEach(key => {
+        const divString = localStorage.getItem(key);
+        const experienceDescription = document.getElementById("newEducationDescription");
+        experienceDescription.innerHTML += divString;
+    });
+
+    educationPanels.forEach(key => {
+        const divString = localStorage.getItem(key);
+        const experienceDescription = document.getElementById("educationDescription");
+        experienceDescription.innerHTML += divString;
+    });
 }
 
 function getExperienceKeys() {
@@ -40,6 +59,77 @@ function getExperienceKeys() {
             }
         }
     }
+}
+
+function retrieveStartDateInputs() {
+    document.querySelectorAll('input[class*="startDateInput_"]').forEach(element => {
+        let targetClass = Array.from(element.classList).find(function (className) {
+            return className.startsWith("startDateInput_");
+        });
+        let result = targetClass.slice("startDateInput_".length);
+        $(element).datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+        }).on('changeDate', function (selectedDate) {
+            var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+            document.querySelector(`.startTime_${result}`).innerHTML = formattedDate;
+            localStorage.setItem(`newExperienceStartDate_${result}`, formattedDate);
+            localStorage.setItem(`newExperienceStartDateValidity_${result}`, true);
+            $(this).css("outline", "0.5px solid #98E37E");
+            $(this).css("border", "0.5px solid #98E37E");
+        })
+    })
+}
+
+function retrieveEndDateInputs() {
+    document.querySelectorAll('input[class*="endDateInput_"]').forEach(element => {
+        let targetClass = Array.from(element.classList).find(function (className) {
+            return className.startsWith("endDateInput_");
+        });
+        let result = targetClass.slice("endDateInput_".length);
+        $(element).datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+        }).on('changeDate', function (selectedDate) {
+            var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+            document.querySelector(`.endTime_${result}`).innerHTML = formattedDate;
+            localStorage.setItem(`newExperienceEndDate_${result}`, formattedDate);
+            localStorage.setItem(`newExperienceEndDateValidity_${result}`, true);
+            $(this).css("outline", "0.5px solid #98E37E");
+            $(this).css("border", "0.5px solid #98E37E");
+        })
+    })
+}
+
+
+function retrievePositionInputs() {
+    document.querySelectorAll('input[class*="positionInput_"]').forEach(element => {
+        let targetClass = Array.from(element.classList).find(function (className) {
+            return className.startsWith("positionInput_");
+        });
+        let result = targetClass.slice("positionInput_".length);
+        element.addEventListener("input", e => {
+            document.querySelector(`.positionPlaceholder_${result}`).innerHTML = e.target.value;
+            localStorage.setItem(`newExperiencePosition_${result}`, e.target.value);
+            let inputResult = inputValidation(e, e.target.value);
+            localStorage.setItem(`newExperiencePositionValidity_${result}`, inputResult);
+        })
+    })
+}
+
+function retrieveEmployerInputs() {
+    document.querySelectorAll('input[class*="employerInput_"]').forEach(element => {
+        let targetClass = Array.from(element.classList).find(function (className) {
+            return className.startsWith("employerInput_");
+        });
+        let result = targetClass.slice("employerInput_".length);
+        element.addEventListener("input", (e) => {
+            document.querySelector(`.employerPlaceholder_${result}`).innerHTML = ", " + e.target.value;
+            localStorage.setItem(`newExperienceEmployer_${result}`, e.target.value);
+            let inputResult = inputValidation(e, e.target.value);
+            localStorage.setItem(`newExperienceEmployerValidity_${result}`, inputResult);
+        })
+    })
 }
 
 function retrieveSchool() {
@@ -386,11 +476,10 @@ function addNewEducation() {
     const newEducationWrapper = document.getElementById("newEducationDescription")
     newEducationWrapper.appendChild(newEducationDescription);
 
-    createNewEducationPanel(key);
-
     localStorage.setItem(`newEducationSchoolValidity_${key}`, false)
     schoolInput.addEventListener("input", e => {
         localStorage.setItem(`newEducationSchool_${key}`, e.target.value);
+        console.log(document.querySelector(`.schoolPlaceholder_${key}`))
         document.querySelector(`.schoolPlaceholder_${key}`).innerHTML = e.target.value;
         if (e.target.value.trim() > 1) {
             removeValidationError(e);
@@ -402,23 +491,31 @@ function addNewEducation() {
 
     localStorage.setItem(`newEducationDegreeValidity_${key}`, false);
     dropdownButton.addEventListener("click", e => {
-        document.querySelector(`dropdownInput_${key}`).innerHTML = e.target.value;
+        this.innerHTML = e.target.innerHTML;
         document.querySelector(`.degreePlacholder_${key}`).innerHTML = ", " + e.target.value;
         localStorage.setItem(`newEducationDegree_${key}`, e.target.innerHTML);
         localStorage.setItem(`newEducationDegreeValidity_${key}`, true);
         removeValidationError(e);
     })
+
+    const divKey = `educationDiv-${key}`;
+    localStorage.setItem(divKey, newEducationDescription.outerHTML);
+
+    createNewEducationPanel(key);
 }
 
 function createNewEducationPanel(key) {
+    const flex = document.createElement('div');
+    flex.classList.add("d-flex");
+
     const school = document.createElement("div");
-    school.classList.add("d-flex", "font-italic", `.schoolPlaceholder_${key}`);
+    school.classList.add(`.schoolPlaceholder_${key}`);
     school.style.fontWeight = "bold";
+    flex.appendChild(school)
 
     const degree = document.createElement("div");
     degree.classList.add(`.degreePlaceholder_${key}`);
-
-    school.appendChild(degree);
+    flex.appendChild(degree);
 
     const educationEndTime = document.createElement("div");
     educationEndTime.classList.add("d-flex", "text-secondary", `.endTime_${key}`);
@@ -427,8 +524,9 @@ function createNewEducationPanel(key) {
     educationDescription.classList.add("mt-2", `.educationDescriptionPlaceholder_${key}`);
 
     const newEducationPanel = document.getElementById("createdEducation");
-    newEducationPanel.append(school);
-    newEducationPanel.append(degree);
+    newEducationPanel.append(flex);
     newEducationPanel.append(educationEndTime);
     newEducationPanel.append(educationDescription);
+    const divKey = `educationPanelDiv-${key}`;
+    localStorage.setItem(divKey, newEducationPanel.outerHTML);
 }
