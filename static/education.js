@@ -4,11 +4,43 @@ $(document).ready(() => {
     let dropdownItems = document.querySelectorAll(".dropdown-item");
     dropdownItems.forEach(element => element.addEventListener("click", updateDropdown))
     document.querySelectorAll(".endDate").forEach(element => endDateInteraction(element));
-    let schoolDescription = document.getElementById("schoolDescription");
-    schoolDescription.addEventListener("input", schoolDescriptionVal);
+    let educationDescriptionInput = document.getElementById("educationDescriptionInput");
+    educationDescriptionInput.addEventListener("input", schoolDescriptionVal);
     getGeneralInfo();
     getExperienceInfo();
+    getData();
 })
+
+function getData() {
+    retrieveSchool();
+    retrieveDropdown();
+    retrieveEducationEndTime();
+    retrieveSchoolDescription();
+}
+
+function retrieveSchool() {
+    let school = localStorage.getItem("school");
+    document.getElementById("school").innerHTML = school;
+    document.getElementById("schoolInput").value = school;
+}
+
+function retrieveDropdown() {
+    let dropdown = localStorage.getItem("dropdown");
+    document.getElementById("dropdownMenuButton").innerHTML = dropdown;
+    document.getElementById("degree").innerHTML = ", " + dropdown;
+}
+
+function retrieveEducationEndTime() {
+    let endTime = localStorage.getItem("educationEndTime");
+    document.getElementById("educationEndTime").innerHTML = endTime;
+    document.getElementById("endDate").value = endTime;
+}
+
+function retrieveSchoolDescription() {
+    let description = localStorage.getItem("schoolDescription");
+    document.getElementById("educationDescription").innerHTML = description;
+    document.getElementById("educationDescriptionInput").value = description;
+}
 
 function updateDropdown(e) {
     let value =  e.target.innerHTML;
@@ -132,9 +164,8 @@ function endDateInteraction(element) {
         autoclose: true,
     }).on('changeDate', function (selectedDate) {
         var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
-        console.log(document.getElementById("endTime    "))
         document.getElementById("educationEndTime").innerHTML = formattedDate;
-        localStorage.setItem("educationEndtime", formattedDate);
+        localStorage.setItem("educationEndTime", formattedDate);
         localStorage.setItem("educationEndTimeValidation", true);
         $(this).css("outline", "0.5px solid #98E37E");
         $(this).css("border", "0.5px solid #98E37E");
