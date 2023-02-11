@@ -20,6 +20,9 @@ function getData() {
     retrieveSchoolDescription();
     getExperienceKeys();
     retrieveCreatedEducation();
+    getEducationKeys();
+    retrieveSchoolInputs();
+    retrieveDegreeInputs();
 }
 
 function retrieveCreatedEducation() {
@@ -38,6 +41,24 @@ function retrieveCreatedEducation() {
         const experienceDescription = document.getElementById("educationDescription");
         experienceDescription.innerHTML += divString;
     });
+}
+
+function getEducationKeys() {
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith("newEducation")) {
+            const value = localStorage.getItem(key);
+            const experienceKey = key.split("_")[1];
+            if (key.includes("School") && !key.includes("Validity")) {
+                document.querySelector(`.schoolInput_${experienceKey}`).value = value;
+                document.querySelector(`.schoolPlaceholder_${experienceKey}`).innerHTML = value;
+            }
+            if (key.includes("Degree") && !key.includes("Validity")) {
+                document.querySelector(`.dropdownInput_${experienceKey}`).innerHTML = value;
+                document.querySelector(`.degreePlaceholder_${experienceKey}`).innerHTML = ", " + value;
+            }
+        }
+    }
 }
 
 function getExperienceKeys() {
@@ -61,73 +82,39 @@ function getExperienceKeys() {
     }
 }
 
-function retrieveStartDateInputs() {
-    document.querySelectorAll('input[class*="startDateInput_"]').forEach(element => {
+
+function retrieveDegreeInputs() {
+    document.querySelectorAll(`a[class*=dropdown-item_]`).forEach(element => {
         let targetClass = Array.from(element.classList).find(function (className) {
-            return className.startsWith("startDateInput_");
+            return className.startsWith("dropdown-item_");
         });
-        let result = targetClass.slice("startDateInput_".length);
-        $(element).datepicker({
-            format: "dd/mm/yyyy",
-            autoclose: true,
-        }).on('changeDate', function (selectedDate) {
-            var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
-            document.querySelector(`.startTime_${result}`).innerHTML = formattedDate;
-            localStorage.setItem(`newExperienceStartDate_${result}`, formattedDate);
-            localStorage.setItem(`newExperienceStartDateValidity_${result}`, true);
-            $(this).css("outline", "0.5px solid #98E37E");
-            $(this).css("border", "0.5px solid #98E37E");
+        let result = targetClass.slice("dropdown-item_".length);
+        element.addEventListener("click", e => {
+            document.querySelector(`.dropdownInput_${result}`).innerHTML = e.target.innerHTML
+            document.querySelector(`.degreePlaceholder_${result}`).innerHTML = ", " + e.target.innerHTML;
+            localStorage.setItem(`newEducationDegree_${result}`, e.target.innerHTML);
+            localStorage.setItem(`newEducationDegreeValidity_${result}`, true);
+            removeValidationError(e);
         })
     })
 }
 
-function retrieveEndDateInputs() {
-    document.querySelectorAll('input[class*="endDateInput_"]').forEach(element => {
+function retrieveSchoolInputs() {
+    document.querySelectorAll('input[class*="schoolInput_"]').forEach(element => {
         let targetClass = Array.from(element.classList).find(function (className) {
-            return className.startsWith("endDateInput_");
+            return className.startsWith("schoolInput_");
         });
-        let result = targetClass.slice("endDateInput_".length);
-        $(element).datepicker({
-            format: "dd/mm/yyyy",
-            autoclose: true,
-        }).on('changeDate', function (selectedDate) {
-            var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
-            document.querySelector(`.endTime_${result}`).innerHTML = formattedDate;
-            localStorage.setItem(`newExperienceEndDate_${result}`, formattedDate);
-            localStorage.setItem(`newExperienceEndDateValidity_${result}`, true);
-            $(this).css("outline", "0.5px solid #98E37E");
-            $(this).css("border", "0.5px solid #98E37E");
-        })
-    })
-}
-
-
-function retrievePositionInputs() {
-    document.querySelectorAll('input[class*="positionInput_"]').forEach(element => {
-        let targetClass = Array.from(element.classList).find(function (className) {
-            return className.startsWith("positionInput_");
-        });
-        let result = targetClass.slice("positionInput_".length);
-        element.addEventListener("input", e => {
-            document.querySelector(`.positionPlaceholder_${result}`).innerHTML = e.target.value;
-            localStorage.setItem(`newExperiencePosition_${result}`, e.target.value);
-            let inputResult = inputValidation(e, e.target.value);
-            localStorage.setItem(`newExperiencePositionValidity_${result}`, inputResult);
-        })
-    })
-}
-
-function retrieveEmployerInputs() {
-    document.querySelectorAll('input[class*="employerInput_"]').forEach(element => {
-        let targetClass = Array.from(element.classList).find(function (className) {
-            return className.startsWith("employerInput_");
-        });
-        let result = targetClass.slice("employerInput_".length);
+        let result = targetClass.slice("schoolInput_".length);
         element.addEventListener("input", (e) => {
-            document.querySelector(`.employerPlaceholder_${result}`).innerHTML = ", " + e.target.value;
-            localStorage.setItem(`newExperienceEmployer_${result}`, e.target.value);
-            let inputResult = inputValidation(e, e.target.value);
-            localStorage.setItem(`newExperienceEmployerValidity_${result}`, inputResult);
+            document.querySelector(`.schoolPlaceholder_${result}`).innerHTML = e.target.value;
+            localStorage.setItem(`newEducationSchool_${result}`, e.target.value);
+            if (e.target.value > 1) {
+                localStorage.setItem(`newEducationSchoolValidity_${result}`, true);
+                removeValidationError(e)
+            } else {
+                localStorage.setItem(`newEducationSchoolValidity_${result}`, false);
+                addValidationError(e)
+            }
         })
     })
 }
@@ -141,7 +128,9 @@ function retrieveSchool() {
 function retrieveDropdown() {
     let dropdown = localStorage.getItem("dropdown");
     document.getElementById("dropdownMenuButton").innerHTML = dropdown;
-    document.getElementById("degree").innerHTML = ", " + dropdown;
+    if (dropdown) {
+        document.getElementById("degree").innerHTML = ", " + dropdown;
+    }
 }
 
 function retrieveEducationEndTime() {
@@ -371,47 +360,47 @@ function addNewEducation() {
 
     // Create dropdown items
     const dropdownItem1 = document.createElement("a");
-    dropdownItem1.classList.add("dropdown-item");
+    dropdownItem1.classList.add("dropdown-item", `dropdown-item_${key}`);
     dropdownItem1.href = "#";
     dropdownItem1.textContent = "საშუალო სკოლის დიპლომი";
 
     const dropdownItem2 = document.createElement("a");
-    dropdownItem2.classList.add("dropdown-item");
+    dropdownItem2.classList.add("dropdown-item", `dropdown-item_${key}`);
     dropdownItem2.href = "#";
     dropdownItem2.textContent = "ზოგადსაგანმანათებლო დიპლომი";
 
     const dropdownItem3 = document.createElement("a");
-    dropdownItem3.classList.add("dropdown-item");
+    dropdownItem3.classList.add("dropdown-item", `dropdown-item_${key}`);
     dropdownItem3.href = "#";
     dropdownItem3.textContent = "ბაკალავრი";
 
     const dropdownItem4 = document.createElement("a");
-    dropdownItem4.classList.add("dropdown-item");
+    dropdownItem4.classList.add("dropdown-item", `dropdown-item_${key}`);
     dropdownItem4.href = "#";
     dropdownItem4.textContent = "მაგისტრატი";
 
     const dropdownItem5 = document.createElement("a");
-    dropdownItem5.className = "dropdown-item";
+    dropdownItem5.classList.add("dropdown-item", `dropdown-item_${key}`);
     dropdownItem5.href = "#";
     dropdownItem5.innerHTML = "დოქტორი";
 
     const dropdownItem6 = document.createElement("a");
-    dropdownItem6.className = "dropdown-item";
+    dropdownItem6.classList.add("dropdown-item", `dropdown-item_${key}`);
     dropdownItem6.href = "#";
     dropdownItem6.innerHTML = "ასოცირებული ხარისხი";
 
     const dropdownItem7 = document.createElement("a");
-    dropdownItem7.className = "dropdown-item";
+    dropdownItem7.classList.add("dropdown-item", `dropdown-item_${key}`);
     dropdownItem7.href = "#";
     dropdownItem7.innerHTML = "სტუდენტი";
 
     const dropdownItem8 = document.createElement("a");
-    dropdownItem8.className = "dropdown-item";
+    dropdownItem8.classList.add("dropdown-item", `dropdown-item_${key}`);
     dropdownItem8.href = "#";
     dropdownItem8.innerHTML = "კოლეჯი (ხარისხის გარეშე)";
 
     const dropdownItem9 = document.createElement("a");
-    dropdownItem9.className = "dropdown-item";
+    dropdownItem9.classList.add("dropdown-item", `dropdown-item_${key}`);
     dropdownItem9.href = "#";
     dropdownItem9.innerHTML = "სხვა";
 
@@ -477,9 +466,8 @@ function addNewEducation() {
     newEducationWrapper.appendChild(newEducationDescription);
 
     localStorage.setItem(`newEducationSchoolValidity_${key}`, false)
-    schoolInput.addEventListener("input", e => {
+    schoolInput.addEventListener("input", (e) => {
         localStorage.setItem(`newEducationSchool_${key}`, e.target.value);
-        console.log(document.querySelector(`.schoolPlaceholder_${key}`))
         document.querySelector(`.schoolPlaceholder_${key}`).innerHTML = e.target.value;
         if (e.target.value.trim() > 1) {
             removeValidationError(e);
@@ -490,12 +478,14 @@ function addNewEducation() {
     })
 
     localStorage.setItem(`newEducationDegreeValidity_${key}`, false);
-    dropdownButton.addEventListener("click", e => {
-        this.innerHTML = e.target.innerHTML;
-        document.querySelector(`.degreePlacholder_${key}`).innerHTML = ", " + e.target.value;
-        localStorage.setItem(`newEducationDegree_${key}`, e.target.innerHTML);
-        localStorage.setItem(`newEducationDegreeValidity_${key}`, true);
-        removeValidationError(e);
+    document.querySelectorAll(`.dropdown-item_${key}`).forEach(element => {
+        element.addEventListener("click", e => {
+            document.querySelector(`.dropdownInput_${key}`).innerHTML = e.target.innerHTML
+            document.querySelector(`.degreePlaceholder_${key}`).innerHTML = ", " + e.target.innerHTML;
+            localStorage.setItem(`newEducationDegree_${key}`, e.target.innerHTML);
+            localStorage.setItem(`newEducationDegreeValidity_${key}`, true);
+            removeValidationError(e);
+        })
     })
 
     const divKey = `educationDiv-${key}`;
@@ -509,19 +499,19 @@ function createNewEducationPanel(key) {
     flex.classList.add("d-flex");
 
     const school = document.createElement("div");
-    school.classList.add(`.schoolPlaceholder_${key}`);
+    school.classList.add(`schoolPlaceholder_${key}`);
     school.style.fontWeight = "bold";
     flex.appendChild(school)
 
     const degree = document.createElement("div");
-    degree.classList.add(`.degreePlaceholder_${key}`);
+    degree.classList.add(`degreePlaceholder_${key}`);
     flex.appendChild(degree);
 
     const educationEndTime = document.createElement("div");
-    educationEndTime.classList.add("d-flex", "text-secondary", `.endTime_${key}`);
+    educationEndTime.classList.add("d-flex", "text-secondary", `endTime_${key}`);
 
     const educationDescription = document.createElement("div");
-    educationDescription.classList.add("mt-2", `.educationDescriptionPlaceholder_${key}`);
+    educationDescription.classList.add("mt-2", `educationDescriptionPlaceholder_${key}`);
 
     const newEducationPanel = document.getElementById("createdEducation");
     newEducationPanel.append(flex);
