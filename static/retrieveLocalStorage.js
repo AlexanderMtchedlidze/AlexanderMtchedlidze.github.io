@@ -1,22 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
     const resume = getResumeData();
     console.log(resume)
-    fetch("https://resume.redberryinternship.ge/api/cvs",
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                cv: resume
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Handle the response data
+    document.body.append(resume)
+    fetch('https://resume.redberryinternship.ge/api/cvs', {
+        method: 'POST',
+        body: JSON.stringify({ resume })
+    })
+        .then(response => {
+            console.log(response)
         })
         .catch(error => {
-            console.log(error)
+            console.error('Error:', error);
         });
 });
 
@@ -28,9 +22,13 @@ function getResumeData() {
         phone_number: localStorage.getItem("resumeTel"),
         experiences: getExperienceData(),
         educations: getEducationData(),
-        image: localStorage.getItem("base64Image"),
         about_me: localStorage.getItem("resumeAboutMe"),
     };
+
+    const dataURL = localStorage.getItem("base64Image");
+    const image = new Image();
+    image.src = dataURL;
+    resume.image = dataURL;
 
     return resume;
 }

@@ -17,7 +17,6 @@ $(document).ready(() => {
 })
 
 function preventEnding(e) {
-    e.preventDefault();
     let schoolInput = document.getElementById("schoolInput");
     let schoolVal = JSON.parse(localStorage.getItem("schoolVal"));
     if (!schoolVal) {
