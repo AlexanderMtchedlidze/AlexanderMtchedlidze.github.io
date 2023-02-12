@@ -239,7 +239,7 @@ function retrieveDegrees() {
                         let classList = classAttribute.split(" ");
                         let desiredClass = classList.find(className => className.startsWith("degree_id-"));
                         let id = desiredClass.replace("degree_id", "");
-                        let dropdownInput =  document.querySelector(`.dropdownInput_${result}`)
+                        let dropdownInput = document.querySelector(`.dropdownInput_${result}`)
                         dropdownInput.innerHTML = e.target.innerHTML
                         dropdownInput.style.borderColor = "#98E37E";
                         dropdownInput.style.outlineColor = "#98E37E";
@@ -622,7 +622,7 @@ function addNewEducation() {
         let value = e.target.value;
         localStorage.setItem(`newEducationSchool_${key}`, value);
         document.querySelector(`.schoolPlaceholder_${key}`).innerHTML = value;
-        if (value.trim() > 1) {
+        if (value.trim().length > 1) {
             removeValidationError(e);
             localStorage.setItem(`newEducationSchoolValidity_${key}`, true)
         } else {
@@ -660,7 +660,7 @@ function addNewEducation() {
         let value = e.target.value;
         localStorage.setItem(`newEducationDescription_${key}`, value);
         document.querySelector(`.educationdescriptionPlaceholder_${key}`).innerHTML = value;
-        if (value.trim() > 0) {
+        if (value.trim().length > 0) {
             e.target.style.borderColor = "#98E37E"
             e.target.style.outlineColor = "#98E37E"
             localStorage.setItem(`newEducationDescriptionValidity_${key}`, true)
@@ -695,10 +695,16 @@ function createNewEducationPanel(key) {
     const educationDescription = document.createElement("div");
     educationDescription.classList.add("mt-2", `educationDescriptionPlaceholder_${key}`);
 
+    const educationWrapper = document.createElement("div");
+    educationWrapper.classList.add("mt-2");
+
+    educationWrapper.append(flex);
+    educationWrapper.append(educationEndTime);
+    educationWrapper.append(educationDescription);
+    
     const newEducationPanel = document.getElementById("createdEducation");
-    newEducationPanel.append(flex);
-    newEducationPanel.append(educationEndTime);
-    newEducationPanel.append(educationDescription);
+    newEducationPanel.append(educationWrapper);
+    
     const divKey = `educationPanelDiv-${key}`;
     localStorage.setItem(divKey, newEducationPanel.outerHTML);
 }

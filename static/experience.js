@@ -25,7 +25,6 @@ $(document).ready(function () {
     retrieveEndDate();
     retrievePositionDescription();
     retrieveCreatedExperience();
-    checkInputValidity();
     retrievePositionInputs();
     retrieveEmployerInputs();
     retrieveStartDateInputs();
@@ -268,7 +267,6 @@ function checkAllInputsValidity() {
 
 
 function positionDescriptionValidation(e) {
-    checkInputs()
     let positionDescription = e.target.value;
     let resumePositionDescription = document.getElementById("resumePositionDescription");
     resumePositionDescription.style.display = "unset";
@@ -290,7 +288,6 @@ function positionDescriptionValidation(e) {
 }
 
 function positionInputValidation(e) {
-    checkInputs()
     let position = e.target.value;
     let resumePositon = document.getElementById("position");
     resumePositon.style.display = "unset";
@@ -302,7 +299,6 @@ function positionInputValidation(e) {
 }
 
 function employerInputValidation(e) {
-    checkInputs()
     let employer = e.target.value;
     let resumeEmployer = document.getElementById("employer");
     resumeEmployer.style.display = "unset";
@@ -334,22 +330,6 @@ function removeValidationError(e) {
     e.target.classList.remove("is-invalid");
 }
 
-
-function checkInputs() {
-    let inputs = document.querySelectorAll("input");
-    let positionDescription = document.getElementById("positionDescription");
-    let isValid = true;
-    for (let i = 0; i < inputs.length; i++) {
-        if (!inputs[i].value.trim().length > 0 || !positionDescription.value.trim().length > 0) {
-            isValid = false;
-            document.getElementById("experience").classList.remove("light-bottom-border");
-            break;
-        }
-    }
-    if (isValid) {
-        document.getElementById("experience").classList.add("light-bottom-border");
-    }
-}
 
 function addExperienceForm() {
     const key = generateRandomString();
@@ -556,17 +536,6 @@ function retrieveCreatedExperience() {
         const experienceDescription = document.getElementById("experience");
         experienceDescription.innerHTML += divString;
     });
-}
-
-function checkInputValidity() {
-    let inputs = document.querySelectorAll("input");
-    for (let i = 0; i < inputs.length; i++) {
-        if (!inputs[i].value.trim().length > 0) {
-            document.querySelector("#experience").classList.remove("light-bottom-border");
-            break;
-        }
-    }
-    document.querySelector("#experience").classList.add("light-bottom-border")
 }
 
 

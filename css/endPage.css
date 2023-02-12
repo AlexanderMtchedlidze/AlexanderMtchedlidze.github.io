@@ -9,6 +9,7 @@
 
 .resume {
     overflow-y: scroll;
+    height: 100vh;
 }
 
 .resume-contanct {
@@ -31,4 +32,38 @@
 
 #resumeImage {
     margin-left: 20px;
+}
+
+#popup {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 300px;
+    height: 100px;
+    background-color: white;
+    display: none;
+    z-index: 1;
+    font-weight: 500;
+    font-size: 28px;
+}
+
+#popup-content {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+#popup-text {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#popup-close {
+    position: absolute;
+    top: 0;
+    right: 14px;
+    font-size: 36px;
+    cursor: pointer;
 }

@@ -26,6 +26,14 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            var popup = document.getElementById("popup");
+            var popupClose = document.getElementById("popup-close");
+
+            popupClose.onclick = function () {
+                popup.style.display = "none";
+            }
+
+            popup.style.display = "block";
             const resume = getResumeData();
             axios.post('https://resume.redberryinternship.ge/api/cvs', resume, {
                 headers: {
@@ -118,9 +126,14 @@
                 educationDescription.innerHTML = education.description
 
                 const newEducationPanel = document.getElementById("createdEducation");
-                newEducationPanel.append(flex);
-                newEducationPanel.append(educationEndTime);
-                newEducationPanel.append(educationDescription);
+
+                const educationWrapper = document.createElement("div");
+                educationWrapper.classList.add("mt-2");
+                
+                educationWrapper.append(flex);
+                educationWrapper.append(educationEndTime);
+                educationWrapper.append(educationDescription);
+                newEducationPanel.appendChild(educationWrapper);
             }
         }
 
@@ -243,8 +256,8 @@
 </head>
 
 <body>
-    <div class="d-flex justify-content-between p-5" style="width: 70%;">
-        <div class="d-flex justify-content-center p-5 resume-input" style="width: 5%;">
+    <div class="d-flex justify-content-between pt-5 pe-5 p-3" style="width: 70%">
+        <div class="d-flex justify-content-center ps-5" style="width: 5%;">
             <a href="index.html" style="height: 30px;">
                 <img src="media/Vector.png" alt="vector" class="go-back-vector">
                 <img src="media/Ellipse 1.png" alt="eclipse" class="go-back-icon" id="goBack" width="40px">
@@ -308,6 +321,12 @@
                 </div>
             </div>
             <div class="redberryLogo"><img src="media/LOGO-12 1.png" alt="Redberry Logo"></div>
+        </div>
+    </div>
+    <div id="popup" class="shadow-lg">
+        <div id="popup-content">
+            <span id="popup-text">რეზიუმე წარმატებით <br> გაიგზავნა 🎉</span>
+            <span id="popup-close">&times;</span>
         </div>
     </div>
 </body>
