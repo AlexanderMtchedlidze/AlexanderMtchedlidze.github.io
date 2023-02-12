@@ -157,10 +157,10 @@ function retrieveEndTimeInputs() {
         });
         let result = targetClass.slice("endTimeInput_".length);
         $(element).datepicker({
-            format: "dd/mm/yyyy",
+            format: "yyyy/mm/dd",
             autoclose: true,
         }).on('changeDate', function (selectedDate) {
-            var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+            var formattedDate = selectedDate.date.getFullYear() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getDate();
             document.querySelector(`.endTime_${result}`).innerHTML = formattedDate;
             localStorage.setItem(`newEducationEndTime_${result}`, formattedDate);
             localStorage.setItem(`newEducationEndTimeValidity_${result}`, true);
@@ -436,10 +436,10 @@ function retrieveCreatedExperience() {
 
 function endDateInteraction(element) {
     $(element).datepicker({
-        format: "dd/mm/yyyy",
+        format: "yyyy/mm/dd",
         autoclose: true,
     }).on('changeDate', function (selectedDate) {
-        var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+        var formattedDate = selectedDate.date.getFullYear() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getDate();
         document.getElementById("educationEndTime").innerHTML = formattedDate;
         localStorage.setItem("educationEndTime", formattedDate);
         localStorage.setItem("educationEndTimeValidation", true);
@@ -582,7 +582,7 @@ function addNewEducation() {
     const endTimeInput = document.createElement("input");
     endTimeInput.setAttribute("type", "text");
     endTimeInput.setAttribute("class", `form-control date form-control-lg endDate endTimeInput_${key}`);
-    endTimeInput.setAttribute("placeholder", "mm / dd / yyyy");
+    endTimeInput.setAttribute("placeholder", "yyyy / mm / dd");
 
     endTimeDiv.appendChild(endTimeLabel);
     endTimeDiv.appendChild(endTimeInput);
@@ -644,10 +644,10 @@ function addNewEducation() {
 
     localStorage.setItem(`newEducationEndTimeValidity_${key}`, false);
     $(endTimeInput).datepicker({
-        format: "dd/mm/yyyy",
+        format: "yyyy/mm/dd",
         autoclose: true,
     }).on("changeDate", (selectedDate) => {
-        var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+        var formattedDate = selectedDate.date.getFullYear() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getDate();
         document.querySelector(`.endTime_${key}`).innerHTML = formattedDate;
         localStorage.setItem(`newEducationEndTime_${key}`, formattedDate);
         localStorage.setItem(`newEducationEndTimeValidity_${key}`, true);

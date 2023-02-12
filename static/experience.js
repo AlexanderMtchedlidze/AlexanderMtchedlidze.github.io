@@ -41,10 +41,10 @@ function retrieveStartDateInputs() {
         });
         let result = targetClass.slice("startDateInput_".length);
         $(element).datepicker({
-            format: "dd/mm/yyyy",
+            format: "yyyy/mm/dd",
             autoclose: true,
         }).on('changeDate', function (selectedDate) {
-            var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+            var formattedDate = selectedDate.date.getFullYear() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getDate();
             document.querySelector(`.startTime_${result}`).innerHTML = formattedDate;
             localStorage.setItem(`newExperienceStartDate_${result}`, formattedDate);
             localStorage.setItem(`newExperienceStartDateValidity_${result}`, true);
@@ -61,10 +61,10 @@ function retrieveEndDateInputs() {
         });
         let result = targetClass.slice("endDateInput_".length);
         $(element).datepicker({
-            format: "dd/mm/yyyy",
+            format: "yyyy/mm/dd",
             autoclose: true,
         }).on('changeDate', function (selectedDate) {
-            var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+            var formattedDate = selectedDate.date.getFullYear() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getDate();
             document.querySelector(`.endTime_${result}`).innerHTML = formattedDate;
             localStorage.setItem(`newExperienceEndDate_${result}`, formattedDate);
             localStorage.setItem(`newExperienceEndDateValidity_${result}`, true);
@@ -155,10 +155,10 @@ function getKeys() {
 
 function startDateInteraction(element) {
     $(element).datepicker({
-        format: "dd/mm/yyyy",
+        format: "yyyy/mm/dd",
         autoclose: true,
     }).on('changeDate', function (selectedDate) {
-        var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+        var formattedDate = selectedDate.date.getFullYear() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getDate();
         document.getElementById("startTime").innerHTML = formattedDate;
         localStorage.setItem("startDate", formattedDate);
         document.getElementById("experienceTitle").style.display = "unset";
@@ -171,10 +171,10 @@ function startDateInteraction(element) {
 
 function endDateInteraction(element) {
     $(element).datepicker({
-        format: "dd/mm/yyyy",
+        format: "yyyy/mm/dd",
         autoclose: true,
     }).on('changeDate', function (selectedDate) {
-        var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+        var formattedDate = selectedDate.date.getFullYear() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getDate();
         document.getElementById("endTime").innerHTML = formattedDate;
         localStorage.setItem("endDate", formattedDate);
         document.getElementById("experienceTitle").style.display = "unset";
@@ -409,7 +409,7 @@ function addExperienceForm() {
     const startDateInput = document.createElement("input");
     startDateInput.type = "text";
     startDateInput.classList.add("form-control", "form-control-lg", "startDate", `startDateInput_${key}`);
-    startDateInput.placeholder = "mm / dd / yyyy";
+    startDateInput.placeholder = "yyyy / mm / dd";
     startDateInput.setAttribute("aria-label", "Start Date");
 
     // create col for the start date
@@ -435,7 +435,7 @@ function addExperienceForm() {
     const endDateInput = document.createElement("input");
     endDateInput.type = "text";
     endDateInput.classList.add("form-control", "form-control-lg", `endDateInput_${key}`, "endDate");
-    endDateInput.placeholder = "mm / dd / yyyy";
+    endDateInput.placeholder = "yyyy / mm / dd";
 
     const endDateLabel = document.createElement("label");
     endDateLabel.htmlFor = "date";
@@ -506,10 +506,10 @@ function addExperienceForm() {
     localStorage.setItem(`newExperienceStartDateValidity_${key}`, false);
 
     $(startDateInput).datepicker({
-        format: "dd/mm/yyyy",
+        format: "yyyy/mm/dd",
         autoclose: true,
     }).on("changeDate", (selectedDate) => {
-        var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+        var formattedDate = selectedDate.date.getFullYear() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getDate();
         document.querySelector(`.startTime_${key}`).innerHTML = formattedDate;
         localStorage.setItem(`newExperienceStartDate_${key}`, formattedDate);
         localStorage.setItem(`newExperienceStartDateValidity_${key}`, true);
@@ -520,10 +520,10 @@ function addExperienceForm() {
     localStorage.setItem(`newExperienceEndDateValidity_${key}`, false);
 
     $(endDateInput).datepicker({
-        format: "dd/mm/yyyy",
+        format: "yyyy/mm/dd",
         autoclose: true,
     }).on("changeDate", (selectedDate) => {
-        var formattedDate = selectedDate.date.getDate() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getFullYear();
+        var formattedDate = selectedDate.date.getFullYear() + "/" + (selectedDate.date.getMonth() + 1) + "/" + selectedDate.date.getDate();
         document.querySelector(`.endTime_${key}`).innerHTML = formattedDate;
         localStorage.setItem(`newExperienceEndDate_${key}`, formattedDate);
         localStorage.setItem(`newExperienceEndDateValidity_${key}`, true);
