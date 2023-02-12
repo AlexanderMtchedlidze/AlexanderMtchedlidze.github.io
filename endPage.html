@@ -34,11 +34,88 @@
                     document.getElementById("resumeEmail").innerHTML = response.data.email;
                     document.getElementById("resumeAboutMe").innerHTML = response.data.about_me
                     document.getElementById("resumeImage").src = `https://resume.redberryinternship.ge${response.data.image}`
+                    createdExperience(response.data.experiences);
+                    createdEducation(response.data.educations);
                 })
                 .catch(error => {
                     console.error(error);
                 });
         });
+
+        function createdExperience(experiences) {
+            for (let i = 0; i < experiences.length; i++) {
+                let experience = experiences[i];
+
+                let experienceWrapper = document.createElement('div');
+                experienceWrapper.className = "pb-2";
+
+                let dFlex = document.createElement('div');
+                dFlex.className = "d-flex";
+                dFlex.style.fontWeight = "bold";
+
+                let position = document.createElement('div');
+                position.innerHTML = experience.position
+
+                let employer = document.createElement('div');
+                employer.innerHTML = experience.employer
+
+                dFlex.appendChild(position);
+                dFlex.appendChild(employer);
+                experienceWrapper.appendChild(dFlex);
+
+                let dFlexSecondary = document.createElement('div');
+                dFlexSecondary.className = "d-flex text-secondary";
+
+                let startTime = document.createElement('div');
+                startTime.innerHTML = experience.start_date
+
+                let endTime = document.createElement('div');
+                endTime.innerHTML = experience.due_date
+
+                dFlexSecondary.appendChild(startTime);
+                dFlexSecondary.appendChild(endTime);
+                experienceWrapper.appendChild(dFlexSecondary);
+
+                let resumePositionDescription = document.createElement('div');
+                resumePositionDescription.innerHTML = experience.description
+
+                experienceWrapper.appendChild(resumePositionDescription);
+
+                let experienceDiv = document.querySelector("#createdExperience")
+
+                experienceDiv.appendChild(experienceWrapper);
+            }
+        }
+
+        function createdEducation(educations) {
+            for (let i = 0; i < educations.length; i++) {
+                let education = educations[i];
+
+                const flex = document.createElement('div');
+                flex.classList.add("d-flex");
+                flex.style.fontWeight = "bold";
+
+                const school = document.createElement("div");
+                school.innerHTML = education.institute;
+                flex.appendChild(school)
+
+                const degree = document.createElement("div");
+                degree.innerHTML = education.degree
+                flex.appendChild(degree);
+
+                const educationEndTime = document.createElement("div");
+                educationEndTime.classList.add("text-secondary");
+                educationEndTime.innerHTML = education.due_date;
+
+                const educationDescription = document.createElement("div");
+                educationDescription.innerHTML = education.description
+
+                const newEducationPanel = document.getElementById("createdEducation");
+                newEducationPanel.append(flex);
+                newEducationPanel.append(educationEndTime);
+                newEducationPanel.append(educationDescription);
+            }
+        }
 
         function getResumeData() {
             const resume = {
