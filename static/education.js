@@ -25,7 +25,6 @@ function preventEnding(e) {
     }
     let degreeInput = document.getElementById("dropdownMenuButton");
     let degreeVal = JSON.parse(localStorage.getItem("dropdownVal"));
-    console.log(degreeVal)
     if (!degreeVal) {
         e.preventDefault();
         degreeInput.style.borderColor = "#F93B1D"
@@ -96,9 +95,15 @@ function fetchDegrees() {
                 const dropdownItem = document.createElement("a");
                 dropdownItem.classList.add("dropdown-item");
                 dropdownItem.textContent = item.title;
+                dropdownItem.classList.add("degree_id-" + item.id)
                 dropdownMenu.appendChild(dropdownItem);
 
                 dropdownItem.addEventListener("click", e => {
+                    let classAttribute = e.target.getAttribute("class");
+                    let classList = classAttribute.split(" ");
+                    let desiredClass = classList.find(className => className.startsWith("degree_id-"));
+                    let id = desiredClass.replace("degree_id", "");
+                    localStorage.setItem("degree_id", "degree_id" + id);
                     removeValidationError(e);
                     let value = e.target.innerHTML;
                     let dropdown = document.getElementById("dropdownMenuButton");
@@ -174,7 +179,7 @@ function getEducationKeys() {
                 document.querySelector(`.schoolInput_${experienceKey}`).value = value;
                 document.querySelector(`.schoolPlaceholder_${experienceKey}`).innerHTML = value;
             }
-            if (key.includes("Degree") && !key.includes("Validity")) {
+            if (key.includes("Degree") && !key.includes("Validity") && !key.includes("Id")) {
                 document.querySelector(`.dropdownInput_${experienceKey}`).innerHTML = value;
                 document.querySelector(`.degreePlaceholder_${experienceKey}`).innerHTML = ", " + value;
             }
@@ -225,9 +230,15 @@ function retrieveDegrees() {
                     const dropdownItem = document.createElement("a");
                     dropdownItem.classList.add("dropdown-item", `dropdown-item_${result}`);
                     dropdownItem.textContent = item.title;
+                    dropdownItem.classList.add("degree_id-" + item.id)
                     dropdownMenu.appendChild(dropdownItem);
 
                     dropdownItem.addEventListener("click", e => {
+                        let classAttribute = e.target.getAttribute("class");
+                        let classList = classAttribute.split(" ");
+                        let desiredClass = classList.find(className => className.startsWith("degree_id-"));
+                        let id = desiredClass.replace("degree_id", "");
+                        localStorage.setItem(`newEducationDegreeId_${result}`, "degree_id" + id);
                         document.querySelector(`.dropdownInput_${result}`).innerHTML = e.target.innerHTML
                         document.querySelector(`.degreePlaceholder_${result}`).innerHTML = ", " + e.target.innerHTML;
                         localStorage.setItem(`newEducationDegree_${result}`, e.target.innerHTML);
@@ -532,9 +543,15 @@ function addNewEducation() {
                 const dropdownItem = document.createElement("a");
                 dropdownItem.classList.add("dropdown-item", `dropdown-item_${key}`);
                 dropdownItem.textContent = item.title;
+                dropdownItem.classList.add("degree_id-" + item.id);
                 dropdownMenu.appendChild(dropdownItem);
 
                 dropdownItem.addEventListener("click", e => {
+                    let classAttribute = e.target.getAttribute("class");
+                    let classList = classAttribute.split(" ");
+                    let desiredClass = classList.find(className => className.startsWith("degree_id-"));
+                    let id = desiredClass.replace("degree_id", "");
+                    localStorage.setItem(`newEducationDegreeId_${key}`, "degree_id" + id);
                     document.querySelector(`.dropdownInput_${key}`).innerHTML = e.target.innerHTML
                     document.querySelector(`.degreePlaceholder_${key}`).innerHTML = ", " + e.target.innerHTML;
                     localStorage.setItem(`newEducationDegree_${key}`, e.target.innerHTML);
