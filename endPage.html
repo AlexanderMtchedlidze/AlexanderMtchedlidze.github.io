@@ -11,6 +11,8 @@
 
     <link href="css/styles.css" rel="stylesheet" />
 
+    <link rel="stylesheet" href="css/general_information.css">
+
     <link rel="stylesheet" href="css/endPage.css">
 
     <link rel="stylesheet" href="css/experience.css">
@@ -41,7 +43,6 @@
                 },
             })
                 .then(response => {
-                    console.log(response.data)
                     document.getElementById("resumeFirstName").innerHTML = response.data.name;
                     document.getElementById("resumeLastName").innerHTML = response.data.surname;
                     document.getElementById("resumeTel").innerHTML = response.data.phone_number;
@@ -129,7 +130,7 @@
 
                 const educationWrapper = document.createElement("div");
                 educationWrapper.classList.add("mt-2");
-                
+
                 educationWrapper.append(flex);
                 educationWrapper.append(educationEndTime);
                 educationWrapper.append(educationDescription);
@@ -260,10 +261,10 @@
         <div class="d-flex justify-content-center ps-5" style="width: 5%;">
             <a href="index.html" style="height: 30px;">
                 <img src="media/Vector.png" alt="vector" class="go-back-vector">
-                <img src="media/Ellipse 1.png" alt="eclipse" class="go-back-icon" id="goBack" width="40px">
+                <img src="media/Ellipse 1-2.png" alt="eclipse" class="go-back-icon" id="goBack" width="40px">
             </a>
         </div>
-        <div class="p-5 border" style="border: 2px solid #C8C8C8;">
+        <div class="p-5 mb-2 border" style="border: 2px solid #C8C8C8;">
             <div class="d-flex resume">
                 <div class="resumeInformation">
                     <div class="d-flex pb-3 light-bottom-border">

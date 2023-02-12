@@ -70,6 +70,8 @@ function checkAllInputsValidity() {
                 }
             } if (key.includes("DescriptionValidity")) {
                 if (!JSON.parse(value)) {
+                    console.log(key)
+                    console.log(value)
                     document.querySelector(`.educationDescriptionInput_${experienceKey}`).style.borderColor = "#F93B1D";
                     document.querySelector(`.educationDescriptionInput_${experienceKey}`).style.outlineColor = "#F93B1D";
                     result = false;
@@ -659,7 +661,7 @@ function addNewEducation() {
     educationDescriptionTextarea.addEventListener("input", e => {
         let value = e.target.value;
         localStorage.setItem(`newEducationDescription_${key}`, value);
-        document.querySelector(`.educationdescriptionPlaceholder_${key}`).innerHTML = value;
+        document.querySelector(`.educationDescriptionPlaceholder_${key}`).innerHTML = value;
         if (value.trim().length > 0) {
             e.target.style.borderColor = "#98E37E"
             e.target.style.outlineColor = "#98E37E"
