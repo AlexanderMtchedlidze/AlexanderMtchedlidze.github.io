@@ -14,17 +14,26 @@
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+    <link rel="icon" type="image/png" href="media/LOGO-12 1.png">
+
+    <script src="static/goBack.js"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const resume = getResumeData();
-            console.log(resume)
             axios.post('https://resume.redberryinternship.ge/api/cvs', resume, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             })
                 .then(response => {
-                    console.log(response)
+                    console.log(response.data)
+                    document.getElementById("resumeFirstName").innerHTML = response.data.name;
+                    document.getElementById("resumeLastName").innerHTML = response.data.surname;
+                    document.getElementById("resumeTel").innerHTML = response.data.phone_number;
+                    document.getElementById("resumeEmail").innerHTML = response.data.email;
+                    document.getElementById("resumeAboutMe").innerHTML = response.data.about_me
+                    document.getElementById("resumeImage").src = `https://resume.redberryinternship.ge${response.data.image}`
                 })
                 .catch(error => {
                     console.error(error);
@@ -44,7 +53,7 @@
 
             const dataURL = localStorage.getItem("base64Image");
             const blob = dataUrlToBlob(dataURL);
-            const file = new File([blob], "myFileName", { type: "image/png" });
+            const file = new File([blob], "resumeImage", { type: "image/png" });
             resume.image = file;
 
             return resume;
@@ -150,64 +159,72 @@
 </head>
 
 <body>
-    <div class="p-5">
-        <div class="d-flex resume">
-            <div class="resumeInformation">
-                <div class="d-flex pb-3 light-bottom-border">
-                    <div>
-                        <div class="d-flex resume-name">
-                            <div class="col" id="resumeFirstName"></div>
-                            <div class="col" id="resumeLastName" style="margin-left: 10px"></div>
-                        </div>
-                        <div class="d-flex resume-contanct">
-                            <img src="media/Vector-2.svg" alt="telephone" id="telIcon" class="resume-icon">
-                            <div class="col" id="resumeTel"></div>
-                        </div>
-                        <div class="d-flex resume-contact" style="margin-bottom: 20px;">
-                            <img src="media/Vector.svg" alt="envelope" id="envelopeIcon" class="resume-icon">
-                            <div class="col" id="resumeEmail"></div>
+    <div class="d-flex">
+        <div class="d-flex justify-content-center p-5 resume-input" style="width: 5%;">
+            <a href="index.html" style="height: 30px;">
+                <img src="media/Vector.png" alt="vector" class="go-back-vector">
+                <img src="media/Ellipse 1.png" alt="eclipse" class="go-back-icon" id="goBack" width="40px">
+            </a>
+        </div>
+        <div class="p-5">
+            <div class="d-flex resume">
+                <div class="resumeInformation">
+                    <div class="d-flex pb-3 light-bottom-border">
+                        <div>
+                            <div class="d-flex resume-name">
+                                <div class="col" id="resumeFirstName"></div>
+                                <div class="col" id="resumeLastName" style="margin-left: 10px"></div>
+                            </div>
+                            <div class="d-flex resume-contanct">
+                                <img src="media/Vector-2.svg" alt="telephone" id="telIcon" class="resume-icon">
+                                <div class="col" id="resumeTel"></div>
+                            </div>
+                            <div class="d-flex resume-contact" style="margin-bottom: 20px;">
+                                <img src="media/Vector.svg" alt="envelope" id="envelopeIcon" class="resume-icon">
+                                <div class="col" id="resumeEmail"></div>
+                            </div>
+                            <div>
+                                <h4 id="resumeAboutMeTitle">ჩემ შესახებ</h4>
+                                <div class="col" id="resumeAboutMe"></div>
+                            </div>
                         </div>
                         <div>
-                            <h4 id="resumeAboutMeTitle">ჩემ შესახებ</h4>
-                            <div class="col" id="resumeAboutMe"></div>
+                            <img width="200px" height="200px" alt="resumeImage" id="resumeImage" class="rounded-circle">
                         </div>
                     </div>
-                    <div>
-                        <img width="200px" height="200px" alt="resumeImage" id="resumeImage" class="rounded-circle">
+                    <div class="pb-2" id="experience">
+                        <div class="mt-3">
+                            <h5 id="experienceTitle">გამოცდილება</h4>
+                        </div>
+                        <div class="d-flex" style="font-weight: bold;">
+                            <div id="position"></div>
+                            <div id="employer"></div>
+                        </div>
+                        <div class="d-flex text-secondary font-italic">
+                            <div id="startTime" class="me-2"></div>
+                            <div id="endTime"></div>
+                        </div>
+                        <div id="resumePositionDescription" class="mt-2"></div>
+                        <div id="createdExperience"></div>
                     </div>
-                </div>
-                <div class="pb-2" id="experience">
-                    <div class="mt-3">
-                        <h5 id="experienceTitle">გამოცდილება</h4>
+                    <div class="pb-2 light-top-border" id="education">
+                        <div class="mt-3">
+                            <h5 id="educationTitle" class="title">განათლება</h4>
+                        </div>
+                        <div class="d-flex font-italic" style="font-weight: bold;">
+                            <div id="school"></div>
+                            <div id="degree"></div>
+                        </div>
+                        <div class="d-flex text-secondary">
+                            <div id="educationEndTime"></div>
+                        </div>
+                        <div id="educationDescription" class="mt-2"></div>
+                        <div id="createdEducation"></div>
                     </div>
-                    <div class="d-flex" style="font-weight: bold;">
-                        <div id="position"></div>
-                        <div id="employer"></div>
-                    </div>
-                    <div class="d-flex text-secondary font-italic">
-                        <div id="startTime" class="me-2"></div>
-                        <div id="endTime"></div>
-                    </div>
-                    <div id="resumePositionDescription" class="mt-2"></div>
-                    <div id="createdExperience"></div>
-                </div>
-                <div class="pb-2 light-top-border" id="education">
-                    <div class="mt-3">
-                        <h5 id="educationTitle" class="title">განათლება</h4>
-                    </div>
-                    <div class="d-flex font-italic" style="font-weight: bold;">
-                        <div id="school"></div>
-                        <div id="degree"></div>
-                    </div>
-                    <div class="d-flex text-secondary">
-                        <div id="educationEndTime"></div>
-                    </div>
-                    <div id="educationDescription" class="mt-2"></div>
-                    <div id="createdEducation"></div>
                 </div>
             </div>
+            <div class="redberryLogo"><img src="media/LOGO-12 1.png" alt="Redberry Logo"></div>
         </div>
-        <div class="redberryLogo"><img src="media/LOGO-12 1.png" alt="Redberry Logo"></div>
     </div>
 </body>
 
