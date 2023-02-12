@@ -9,6 +9,12 @@
     <!-- Modified Bootstrap-->
     <link href="css/main.min.css" rel="stylesheet" />
 
+    <link href="css/styles.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="css/endPage.css">
+
+    <link rel="stylesheet" href="css/experience.css">
+
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -57,7 +63,7 @@
                 position.innerHTML = experience.position
 
                 let employer = document.createElement('div');
-                employer.innerHTML = experience.employer
+                employer.innerHTML = ", " + experience.employer
 
                 dFlex.appendChild(position);
                 dFlex.appendChild(employer);
@@ -71,6 +77,7 @@
 
                 let endTime = document.createElement('div');
                 endTime.innerHTML = experience.due_date
+                endTime.classList.add("ms-2")
 
                 dFlexSecondary.appendChild(startTime);
                 dFlexSecondary.appendChild(endTime);
@@ -100,7 +107,7 @@
                 flex.appendChild(school)
 
                 const degree = document.createElement("div");
-                degree.innerHTML = education.degree
+                degree.innerHTML = ", " + education.degree
                 flex.appendChild(degree);
 
                 const educationEndTime = document.createElement("div");
@@ -236,14 +243,14 @@
 </head>
 
 <body>
-    <div class="d-flex">
+    <div class="d-flex justify-content-between p-5" style="width: 70%;">
         <div class="d-flex justify-content-center p-5 resume-input" style="width: 5%;">
             <a href="index.html" style="height: 30px;">
                 <img src="media/Vector.png" alt="vector" class="go-back-vector">
                 <img src="media/Ellipse 1.png" alt="eclipse" class="go-back-icon" id="goBack" width="40px">
             </a>
         </div>
-        <div class="p-5">
+        <div class="p-5 border" style="border: 2px solid #C8C8C8;">
             <div class="d-flex resume">
                 <div class="resumeInformation">
                     <div class="d-flex pb-3 light-bottom-border">
@@ -261,7 +268,7 @@
                                 <div class="col" id="resumeEmail"></div>
                             </div>
                             <div>
-                                <h4 id="resumeAboutMeTitle">ჩემ შესახებ</h4>
+                                <h4 id="resumeAboutMeTitle" style="display: unset;">ჩემ შესახებ</h4>
                                 <div class="col" id="resumeAboutMe"></div>
                             </div>
                         </div>
