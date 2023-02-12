@@ -8,11 +8,84 @@ $(document).ready(() => {
     educationDescriptionInput.addEventListener("input", schoolDescriptionVal);
     let addEducation = document.getElementById("addEducation");
     addEducation.addEventListener("click", addNewEducation);
+    let endingButton = document.getElementById("endingButton");
+    endingButton.addEventListener("click", preventEnding);
     getGeneralInfo();
     getExperienceInfo();
     fetchDegrees();
     getData();
 })
+
+function preventEnding(e) {
+    let schoolInput = document.getElementById("schoolInput");
+    let schoolVal = JSON.parse(localStorage.getItem("schoolVal"));
+    if (!schoolVal) {
+        e.preventDefault();
+        schoolInput.classList.add("is-invalid");
+    }
+    let degreeInput = document.getElementById("dropdownMenuButton");
+    let degreeVal = JSON.parse(localStorage.getItem("dropdownVal"));
+    console.log(degreeVal)
+    if (!degreeVal) {
+        e.preventDefault();
+        degreeInput.style.borderColor = "#F93B1D"
+        degreeInput.style.outlineColor = "#F93B1D"
+    }
+    let endTimeInput = document.getElementById("endDate");
+    let endTimeVal = localStorage.getItem("educationEndTimeValidation");
+    if (!endTimeVal) {
+        e.preventDefault();
+        endTimeInput.style.borderColor = "#F93B1D"
+        endTimeInput.style.outlineColor = "#F93B1D"
+    }
+    let educationDescriptionInput = document.getElementById("educationDescriptionInput");
+    let educationDescriptionInputVal = JSON.parse(localStorage.getItem("schoolDescriptionVal"));
+    if (!educationDescriptionInputVal) {
+        e.preventDefault();
+        educationDescriptionInput.style.borderColor = "#F93B1D"
+        educationDescriptionInput.style.outlineColor = "#F93B1D"
+    }
+    let inputsResult = checkAllInputsValidity();
+    if (!inputsResult) {
+        e.preventDefault();
+    }
+}
+
+function checkAllInputsValidity() {
+    let result = true;
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith("newEducation")) {
+            const value = localStorage.getItem(key);
+            const experienceKey = key.split("_")[1];
+            if (key.includes("SchoolValidity")) {
+                if (!JSON.parse(value)) {
+                    document.querySelector(`.schoolInput_${experienceKey}`).classList.add("is-invalid");
+                    result = false;
+                }
+            } if (key.includes("DegreeValidity")) {
+                if (!JSON.parse(value)) {
+                    document.querySelector(`.dropdownInput_${experienceKey}`).style.borderColor = "#F93B1D";
+                    document.querySelector(`.dropdownInput_${experienceKey}`).style.outlineColor = "#F93B1D";
+                    result = false;
+                }
+            } if (key.includes("DescriptionValidity")) {
+                if (!JSON.parse(value)) {
+                    document.querySelector(`.educationDescriptionInput_${experienceKey}`).style.borderColor = "#F93B1D";
+                    document.querySelector(`.educationDescriptionInput_${experienceKey}`).style.outlineColor = "#F93B1D";
+                    result = false;
+                }
+            } if (key.includes("EndTimeValidity")) {
+                if (!JSON.parse(value)) {
+                    document.querySelector(`.endTimeInput_${experienceKey}`).style.borderColor = "#F93B1D";
+                    document.querySelector(`.endTimeInput_${experienceKey}`).style.outlineColor = "#F93B1D";
+                    result = false;
+                }
+            }
+        }
+    }
+    return result;
+}
 
 function fetchDegrees() {
     fetch("https://resume.redberryinternship.ge/api/degrees")
@@ -66,7 +139,7 @@ function retrieveCreatedEducation() {
 
     educationPanels.forEach(key => {
         const divString = localStorage.getItem(key);
-        const experienceDescription = document.getElementById("educationDescription");
+        const experienceDescription = document.getElementById("createdEducation");
         experienceDescription.innerHTML += divString;
     });
 }
@@ -365,10 +438,12 @@ function schoolDescriptionVal(e) {
     localStorage.setItem("schoolDescriptionVal", false);
     document.getElementById("educationDescription").innerHTML = description;
     if (description.trim().length > 0) {
-        removeValidationError(e);
+        e.target.style.outlineColor = "#98E37E"
+        e.target.style.borderColor = "#98E37E"
         localStorage.setItem("schoolDescriptionVal", true);
     } else {
-        addValidationError(e);
+        e.target.style.outlineColor = "#EF5050"
+        e.target.style.borderColor = "#EF5050"
     }
 }
 
@@ -544,7 +619,7 @@ function addNewEducation() {
         })
     })
 
-    localStorage.setItem(`newExperienceEndTimeValidity_${key}`, false);
+    localStorage.setItem(`newEducationEndTimeValidity_${key}`, false);
     $(endTimeInput).datepicker({
         format: "dd/mm/yyyy",
         autoclose: true,
