@@ -115,10 +115,12 @@ function retrievePositionDescriptionInputs() {
             document.querySelector(`.positionDescriptionPlaceholder_${result}`).innerHTML = e.target.value;
             localStorage.setItem(`newExperienceDescription_${result}`, e.target.value);
             if (e.target.value.trim().length > 0) {
-                removeValidationError(e);
+                e.target.style.borderColor = "#98E37E"
+                e.target.style.outlineColor = "#98E37E"
                 localStorage.setItem(`newExperienceDescriptionValidity_${result}`, true);
             } else {
-                addValidationError(e);
+                e.target.style.borderColor = "#EF5050"
+                e.target.style.outlineColor = "#EF5050"
                 localStorage.setItem(`newExperienceDescriptionValidity_${result}`, false);
             }
         })
@@ -489,10 +491,12 @@ function addExperienceForm() {
 
     descriptionInput.addEventListener("input", (e) => {
         if (e.target.value.trim().length > 0) {
-            removeValidationError(e);
+            e.target.style.borderColor = "#98E37E"
+            e.target.style.outlineColor = "#98E37E"
             localStorage.setItem(`newExperienceDescriptionValidity_${key}`, true);
         } else {
-            addValidationError(e);
+            e.target.style.borderColor = "#EF5050"
+            e.target.style.outlineColor = "#EF5050"
             localStorage.setItem(`newExperienceDescriptionValidity_${key}`, false);
         }
         document.querySelector(`.positionDescriptionPlaceholder_${key}`).innerHTML = e.target.value;

@@ -17,6 +17,7 @@ $(document).ready(() => {
 })
 
 function preventEnding(e) {
+    e.preventDefault();
     let schoolInput = document.getElementById("schoolInput");
     let schoolVal = JSON.parse(localStorage.getItem("schoolVal"));
     if (!schoolVal) {
@@ -104,9 +105,10 @@ function fetchDegrees() {
                     let desiredClass = classList.find(className => className.startsWith("degree_id-"));
                     let id = desiredClass.replace("degree_id", "");
                     localStorage.setItem("degree_id", "degree_id" + id);
-                    removeValidationError(e);
-                    let value = e.target.innerHTML;
                     let dropdown = document.getElementById("dropdownMenuButton");
+                    dropdown.style.borderColor = "#98E37E";
+                    dropdown.style.outlineColor = "#98E37E";
+                    let value = e.target.innerHTML;
                     document.getElementById("degree").innerHTML = ", " + value;
                     dropdown.innerHTML = value;
                     localStorage.setItem("dropdownVal", true);
@@ -238,12 +240,14 @@ function retrieveDegrees() {
                         let classList = classAttribute.split(" ");
                         let desiredClass = classList.find(className => className.startsWith("degree_id-"));
                         let id = desiredClass.replace("degree_id", "");
+                        let dropdownInput =  document.querySelector(`.dropdownInput_${result}`)
+                        dropdownInput.innerHTML = e.target.innerHTML
+                        dropdownInput.style.borderColor = "#98E37E";
+                        dropdownInput.style.outlineColor = "#98E37E";
                         localStorage.setItem(`newEducationDegreeId_${result}`, "degree_id" + id);
-                        document.querySelector(`.dropdownInput_${result}`).innerHTML = e.target.innerHTML
                         document.querySelector(`.degreePlaceholder_${result}`).innerHTML = ", " + e.target.innerHTML;
                         localStorage.setItem(`newEducationDegree_${result}`, e.target.innerHTML);
                         localStorage.setItem(`newEducationDegreeValidity_${result}`, true);
-                        removeValidationError(e);
                     })
                 });
             })
@@ -285,10 +289,12 @@ function retrieveEducationDescriptionInputs() {
             localStorage.setItem(`newEducationDescription_${result}`, value);
             if (value.trim().length > 0) {
                 localStorage.setItem(`newEducationDescriptionValidity_${result}`, true);
-                removeValidationError(e)
+                e.target.style.borderColor = "#98E37E"
+                e.target.style.outlineColor = "#98E37E"
             } else {
                 localStorage.setItem(`newEducationDescriptionValidity_${result}`, false);
-                addValidationError(e)
+                e.target.style.borderColor = "#EF5050"
+                e.target.style.outlineColor = "#EF5050"
             }
         })
     })
@@ -632,7 +638,8 @@ function addNewEducation() {
             document.querySelector(`.degreePlaceholder_${key}`).innerHTML = ", " + e.target.innerHTML;
             localStorage.setItem(`newEducationDegree_${key}`, e.target.innerHTML);
             localStorage.setItem(`newEducationDegreeValidity_${key}`, true);
-            removeValidationError(e);
+            dropdownInput.style.borderColor = "#98E37E";
+            dropdownInput.style.outlineColor = "#98E37E";
         })
     })
 
@@ -655,10 +662,12 @@ function addNewEducation() {
         localStorage.setItem(`newEducationDescription_${key}`, value);
         document.querySelector(`.educationdescriptionPlaceholder_${key}`).innerHTML = value;
         if (value.trim() > 0) {
-            removeValidationError(e);
+            e.target.style.borderColor = "#98E37E"
+            e.target.style.outlineColor = "#98E37E"
             localStorage.setItem(`newEducationDescriptionValidity_${key}`, true)
         } else {
-            addValidationError(e);
+            e.target.style.borderColor = "#EF5050"
+            e.target.style.outlineColor = "#EF5050"
         }
     })
 
