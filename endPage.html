@@ -36,14 +36,13 @@
             }
 
             popup.style.display = "block";
-            let name = localStorage.getItem("name");
+            let name = localStorage.getItem("resumeFirstName");
             if (name) {
                 const resume = getResumeData();
                 sendPost(resume);
                 localStorage.clear();
             } else {
                 popup.style.display = "none";
-                document.querySelector(".resume").innerHTML = "";
                 document.querySelector(".resume").innerHTML = "ინფორმაცია გვერდის გადატვირთვის გამო წაიშალა. გთხოვთ, თავიდან შეავსოთ რეზიუმე."
             }
 
