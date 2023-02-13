@@ -100,7 +100,8 @@ function fileInputValidation(e) {
         localStorage.setItem("base64Image", srcData);
     };
     fileReader.readAsDataURL(imageFile);
-    removeValidationError(e);
+    e.target.style.borderColor = "#98E37E"
+    e.target.style.outlineColor = "#98E37E"
     localStorage.setItem("imageValidation", true);
 }
 
@@ -132,10 +133,12 @@ function aboutMeValidation(e) {
     localStorage.setItem("resumeAboutMe", aboutMe);
     if (lengthValidation) {
         resumeAboutMeTitle.style.display = "unset";
-        removeValidationError(e);
+        e.target.style.borderColor = "#98E37E"
+        e.target.style.outlineColor = "#98E37E"
     } else {
         resumeAboutMeTitle.style.display = "none";
-        e.target.classList.remove("is-valid");
+        e.target.style.outlineColor = "#EF5050"
+        e.target.style.borderColor = "#EF5050"
     }
 }
 
