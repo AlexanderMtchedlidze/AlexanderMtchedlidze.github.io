@@ -36,7 +36,20 @@
             }
 
             popup.style.display = "block";
-            const resume = getResumeData();
+            let name = localStorage.getItem("name");
+            if (name) {
+                const resume = getResumeData();
+                sendPost(resume);
+                localStorage.clear();
+            } else {
+                popup.style.display = "none";
+                document.querySelector(".resume").innerHTML = "";
+                document.querySelector(".resume").innerHTML = "ინფორმაცია გვერდის გადატვირთვის გამო წაიშალა. გთხოვთ, თავიდან შეავსოთ რეზიუმე."
+            }
+
+        });
+
+        function sendPost(resume) {
             axios.post('https://resume.redberryinternship.ge/api/cvs', resume, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -55,7 +68,7 @@
                 .catch(error => {
                     console.error(error);
                 });
-        });
+        }
 
         function createdExperience(experiences) {
             for (let i = 0; i < experiences.length; i++) {
